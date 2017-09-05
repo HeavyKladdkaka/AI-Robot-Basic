@@ -1,6 +1,7 @@
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 
 import java.io.FileReader;
@@ -16,15 +17,15 @@ public class Position {
         try {
 
             Object obj = parser.parse(new FileReader(
-                    "/Users/<username>/Documents/file1.txt"));
+                    "./input/Path-around-table.json"));
 
             JSONObject jsonObject = (JSONObject) obj;
 
-            String name = (String) jsonObject.get("Name");
+            JSONValue pose = (JSONValue) jsonObject.get("Pose");
             String author = (String) jsonObject.get("Author");
             JSONArray companyList = (JSONArray) jsonObject.get("Company List");
 
-            System.out.println("Name: " + name);
+            System.out.println("Pose: " + pose);
             System.out.println("Author: " + author);
             System.out.println("\nCompany List:");
             Iterator<String> iterator = companyList.iterator();
