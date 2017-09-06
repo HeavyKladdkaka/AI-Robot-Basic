@@ -9,7 +9,7 @@ import java.util.Iterator;
 
 public class Position {
 
-
+    double x, y;
     public double getX() { return x; }
     public double getY() { return y; }
 
