@@ -5,7 +5,12 @@ public class RobotRover {
     Orientation orientation;
 
     public RobotRover(){
-        
+        //read start position
+        //SetMovementPath
+        //MoveTo Path(Path[1])
+        //if(Position == Path[0])
+        //  MoveToPath(Path[2])
+        //Path[1] == null
     }
 
     public Position GetRobotPosition(){
