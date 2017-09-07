@@ -1,16 +1,12 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
+import java.io.*;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
-// Jar file for JSON support
-import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.annotation.*;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 /**
  * TestRobot interfaces to the (real or virtual) robot over a network connection.
  * It uses Java -> JSON -> HttpRequest -> Network -> DssHost32 -> Lokarria(Robulab) -> Core -> MRDS4
@@ -19,11 +15,10 @@ import com.fasterxml.jackson.annotation.*;
  */
 public class TestRobot4
 {
-    private String host;                // host and port numbers
-    private int port;
-    private ObjectMapper mapper;        // maps between JSON and Java structures
-    private TestRobot robot;
+    private RobotCommunication robotcomm;  // communication drivers
 
+    private String host;
+    private int port;
     /**
      * Create a robot connected to host "host" at port "port"
      * @param host normally http://127.0.0.1
@@ -33,9 +28,6 @@ public class TestRobot4
     {
         this.host = host;
         this.port = port;
-        //this.robot = this;
-
-        mapper = new ObjectMapper();
     }
 
     /**
@@ -46,48 +38,55 @@ public class TestRobot4
      */
     public static void main(String[] args) throws Exception
     {
+        File pathFile = new File
+                ("/Users/Aron/Documents/AI-Robot-Basic-master/input/Path" +
+                        "-around-table.json");
+        BufferedReader in = new BufferedReader(new InputStreamReader(
+                new FileInputStream(pathFile)));
+        ObjectMapper mapper = new ObjectMapper();
+        // read the path from the file
+        Collection <Map<String, Object>> data =
+                (Collection<Map<String, Object>>) mapper.readValue(in, Collection.class);
+        int nPoints = data.size();
+        Position[] path = new Position[nPoints];
+        int index = 0;
+        for (Map<String, Object> point : data)
+        {
+            Map<String, Object> pose = (Map<String, Object>)point.get("Pose");
+            Map<String, Object> aPosition = (Map<String, Object>)pose.get("Position");
+            double x = (Double)aPosition.get("X");
+            double y = (Double)aPosition.get("Y");
+            path[index] = new Position(x, y);
+            index++;
+        }
         System.out.println("Creating Robot");
-        TestRobot robot = new TestRobot("http://127.0.0.1", 50000);
+        TestRobot4 robot = new TestRobot4("http://127.0.0.1", 50000);
 
-        System.out.println("Creating response");
-        LocalizationResponse lr = new LocalizationResponse();
+        robot.run();
+    }
 
-        System.out.println("Creating request");
-        DifferentialDriveRequest dr = new DifferentialDriveRequest();
 
-        // set up the request to move in a circle
-        dr.setAngularSpeed(Math.PI * 0.25);
+    private void run() throws Exception
+    {
+        RobotCommunication robotcomm = new RobotCommunication(host, port);
+        LocalizationResponse lr = new LocalizationResponse(); // response
+        DifferentialDriveRequest dr = new DifferentialDriveRequest(); // request
+        dr.setAngularSpeed(Math.PI * 0.25); // set up the request to move in a circle
         dr.setLinearSpeed(1.0);
-
-        System.out.println("Start to move robot");
-        int rc = robot.putRequest(dr);
-        System.out.println("Response code " + rc);
-
+        int rc = robotcomm.putRequest(dr); // move
         for (int i = 0; i < 16; i++)
         {
-            try
-            {
-                Thread.sleep(1000);
-            }
-            catch (InterruptedException ex) {}
-
-            // ask the robot about its position and angle
-            robot.getResponse(lr);
-
-            double angle = robot.getHeadingAngle(lr);
+            // wait a second
+            robotcomm.getResponse(lr); // ask the robot about its position and angle
+            double angle = lr.getHeadingAngle();
             System.out.println("heading = " + angle);
-
-            double [] position = robot.getPosition(lr);
+            double [] position = getPosition(lr);
             System.out.println("position = " + position[0] + ", " + position[1]);
         }
-
-        // set up request to stop the robot
+// set up request to stop the robot
         dr.setLinearSpeed(0);
         dr.setAngularSpeed(0);
-
-        System.out.println("Stop robot");
-        rc = robot.putRequest(dr);
-        System.out.println("Response code " + rc);
+        rc = robotcomm.putRequest(dr);
 
     }
 
@@ -114,65 +113,6 @@ public class TestRobot4
         return lr.getPosition();
     }
 
-
-    /**
-     * Send a request to the robot.
-     * @param r request to send
-     * @return response code from the connection (the web server)
-     * @throws Exception
-     */
-    public int putRequest(Request r) throws Exception
-    {
-        URL url = new URL(host + ":" + port + r.getPath());
-
-        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-
-        connection.setDoOutput(true);
-
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setUseCaches (false);
-
-        OutputStreamWriter out = new OutputStreamWriter(
-                connection.getOutputStream());
-
-        // construct a JSON string
-        String json = mapper.writeValueAsString(r.getData());
-
-        // write it to the web server
-        out.write(json);
-        out.close();
-
-        // wait for response code
-        int rc = connection.getResponseCode();
-
-        return rc;
-    }
-
-    /**
-     * Get a response from the robot
-     * @param r response to fill in
-     * @return response same as parameter
-     * @throws Exception
-     */
-    public Response getResponse(Response r) throws Exception
-    {
-        URL url = new URL(host + ":" + port + r.getPath());
-        System.out.println(url);
-
-        // open a connection to the web server and then get the resulting data
-        URLConnection connection = url.openConnection();
-        BufferedReader in = new BufferedReader(new InputStreamReader(
-                connection.getInputStream()));
-
-        // map it to a Java Map
-        Map<String, Object> data = mapper.readValue(in, Map.class);
-        r.setData(data);
-
-        in.close();
-
-        return r;
-    }
 
 }
 
