@@ -6,10 +6,10 @@ import java.util.Map;
 
 public class TestRobot3
 {
+    private double robotHeading;
     private RobotCommunication robotcomm;  // communication drivers
     private Position[] path;
     private Position robotPosition;
-    private double heading;
 
     /**
      * Create a robot connected to host "host" at port "port"
@@ -41,8 +41,11 @@ public class TestRobot3
 
         while(true){
             double[] coordinates = getPosition(new LocalizationResponse());
-            heading = getHeadingAngle(new LocalizationResponse());
+            robotHeading = getHeadingAngle(new LocalizationResponse());
             robotPosition = new Position(coordinates[0], coordinates[2]);
+
+            System.out.println("Position: "+ robotPosition);
+            System.out.println("Heading: "+ robotHeading);
         }
     }
 
