@@ -88,7 +88,6 @@ public class TestRobot
         System.out.println("Stop robot");
         rc = robot.putRequest(dr);
         System.out.println("Response code " + rc);
-
     }
 
     /**

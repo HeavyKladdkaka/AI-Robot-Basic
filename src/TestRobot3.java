@@ -1,15 +1,18 @@
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.geometry.Pos;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 
-import java.io.FileReader;
+import java.io.*;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 
 public class TestRobot3
 {
-    private RobotCommunication robotcomm;  // communication drivers
+    //private RobotCommunication robotcomm;  // communication drivers
     private Position[] path;
 
     /**
@@ -19,7 +22,7 @@ public class TestRobot3
      */
     public TestRobot3(String host, int port)
     {
-        robotcomm = new RobotCommunication(host, port);
+        //robotcomm = new RobotCommunication(host, port);
     }
 
     /**
@@ -30,7 +33,7 @@ public class TestRobot3
      */
     public static void main(String[] args) throws Exception
     {
-        System.out.println("Creating Robot");
+        System.out.println("Creating Robot3");
         TestRobot3 robot = new TestRobot3("http://127.0.0.1", 50000);
         robot.run();
     }
@@ -38,44 +41,34 @@ public class TestRobot3
 
     public void run() throws Exception
     {
-
-
+        SetRobotPath();
     }
 
-    public void SetRobotPath(){
-        JSONParser parser = new JSONParser();
+    void SetRobotPath(){
+        File pathFile = new File("Path-around-table.json");
+        try{
+            BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(pathFile)));
 
-        try {
+            ObjectMapper mapper = new ObjectMapper();
 
-            Object obj = parser.parse(new FileReader(
-                    "./input/Path-around-table.json"));
-
-            JSONObject jsonObject = (JSONObject) obj;
-
-            JSONValue pose = (JSONValue) jsonObject.get("Pose");
-            String author = (String) jsonObject.get("Author");
-            JSONArray companyList = (JSONArray) jsonObject.get("Company List");
-            JSONArray positions = (JSONArray) jsonObject.get("Position");
-
-            System.out.println("Pose: " + pose);
-            System.out.println("Author: " + author);
-            System.out.println("\nCompany List:");
-
-            Iterator<String> positionIterator = positions.iterator();
-            while(positionIterator.hasNext()) {
-                //Position p = new Position(positionIterator.next());
-                System.out.println(positionIterator.next());
+            // read the path from the file
+            Collection<Map<String, Object>> data = (Collection<Map<String, Object>>) mapper.readValue(in, Collection.class);
+            int nPoints = data.size();
+            path = new Position[nPoints];
+            int index = 0;
+            for (Map<String, Object> point : data)
+            {
+                Map<String, Object> pose = (Map<String, Object>)point.get("Pose");
+                Map<String, Object> aPosition = (Map<String, Object>)pose.get("Position");
+                double x = (Double)aPosition.get("X");
+                double y = (Double)aPosition.get("Y");
+                path[index] = new Position(x, y);
+                index++;
             }
+        } catch(FileNotFoundException e){
 
-            //path = positions.toArray();
+        } catch(IOException e){
 
-            Iterator<String> iterator = companyList.iterator();
-            while (iterator.hasNext()) {
-                System.out.println(iterator.next());
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
