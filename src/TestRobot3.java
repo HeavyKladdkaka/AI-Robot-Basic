@@ -41,12 +41,11 @@ public class TestRobot3
 
     public void run() throws Exception
     {
-        SetRobotPath();
+        path = SetRobotPath("./input/Path-around-table.json");
     }
 
-
-    void SetRobotPath(){
-        File pathFile = new File("Path-around-table.json");
+    Position[] SetRobotPath(String filename){
+        File pathFile = new File(filename);
         try{
             BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(pathFile)));
 
@@ -66,11 +65,16 @@ public class TestRobot3
                 path[index] = new Position(x, y);
                 index++;
             }
+            System.out.println("Found path. First position is: ");
+            System.out.println(path[0].getX() + ":" + path[0].getY());
+            return path;
         } catch(FileNotFoundException e){
-
+            System.out.println("File not found. ");
         } catch(IOException e){
-
+            System.out.println("IOException. ");
         }
+        System.out.println("Null path");
+        return null;
     }
 
     /**
