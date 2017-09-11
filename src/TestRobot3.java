@@ -44,6 +44,7 @@ public class TestRobot3
         SetRobotPath();
     }
 
+
     void SetRobotPath(){
         File pathFile = new File("Path-around-table.json");
         try{
