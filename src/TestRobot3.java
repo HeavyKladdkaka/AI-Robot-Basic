@@ -1,19 +1,15 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javafx.geometry.Pos;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 
 public class TestRobot3
 {
-    //private RobotCommunication robotcomm;  // communication drivers
+    private RobotCommunication robotcomm;  // communication drivers
     private Position[] path;
+    private Position robotPosition;
+    private double heading;
 
     /**
      * Create a robot connected to host "host" at port "port"
@@ -22,7 +18,7 @@ public class TestRobot3
      */
     public TestRobot3(String host, int port)
     {
-        //robotcomm = new RobotCommunication(host, port);
+        robotcomm = new RobotCommunication(host, port);
     }
 
     /**
@@ -42,6 +38,12 @@ public class TestRobot3
     public void run() throws Exception
     {
         path = SetRobotPath("./input/Path-around-table.json");
+
+        while(true){
+            double[] coordinates = getPosition(new LocalizationResponse());
+            heading = getHeadingAngle(new LocalizationResponse());
+            robotPosition = new Position(coordinates[0], coordinates[2]);
+        }
     }
 
     Position[] SetRobotPath(String filename){
@@ -99,7 +101,6 @@ public class TestRobot3
     {
         return lr.getPosition();
     }
-
 
 }
 
