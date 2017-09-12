@@ -1,16 +1,15 @@
-import javafx.geometry.Pos;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-import org.json.simple.parser.JSONParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.FileReader;
-import java.util.Iterator;
+import java.io.*;
+import java.util.Collection;
+import java.util.Map;
 
 public class TestRobot3
 {
+    private double robotHeading;
     private RobotCommunication robotcomm;  // communication drivers
     private Position[] path;
+    private Position robotPosition;
 
     /**
      * Create a robot connected to host "host" at port "port"
@@ -30,7 +29,7 @@ public class TestRobot3
      */
     public static void main(String[] args) throws Exception
     {
-        System.out.println("Creating Robot");
+        System.out.println("Creating Robot3");
         TestRobot3 robot = new TestRobot3("http://127.0.0.1", 50000);
         robot.run();
     }
@@ -38,45 +37,49 @@ public class TestRobot3
 
     public void run() throws Exception
     {
+        path = SetRobotPath("./input/Path-around-table.json");
 
+        while(true){
+            double[] coordinates = getPosition(new LocalizationResponse());
+            robotHeading = getHeadingAngle(new LocalizationResponse());
+            robotPosition = new Position(coordinates[0], coordinates[2]);
 
+            System.out.println("Position: "+ robotPosition);
+            System.out.println("Heading: "+ robotHeading);
+        }
     }
 
-    public void SetRobotPath(){
-        JSONParser parser = new JSONParser();
+    Position[] SetRobotPath(String filename){
+        File pathFile = new File(filename);
+        try{
+            BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(pathFile)));
 
-        try {
+            ObjectMapper mapper = new ObjectMapper();
 
-            Object obj = parser.parse(new FileReader(
-                    "./input/Path-around-table.json"));
-
-            JSONObject jsonObject = (JSONObject) obj;
-
-            JSONValue pose = (JSONValue) jsonObject.get("Pose");
-            String author = (String) jsonObject.get("Author");
-            JSONArray companyList = (JSONArray) jsonObject.get("Company List");
-            JSONArray positions = (JSONArray) jsonObject.get("Position");
-
-            System.out.println("Pose: " + pose);
-            System.out.println("Author: " + author);
-            System.out.println("\nCompany List:");
-
-            Iterator<String> positionIterator = positions.iterator();
-            while(positionIterator.hasNext()) {
-                //Position p = new Position(positionIterator.next());
-                System.out.println(positionIterator.next());
+            // read the path from the file
+            Collection<Map<String, Object>> data = (Collection<Map<String, Object>>) mapper.readValue(in, Collection.class);
+            int nPoints = data.size();
+            path = new Position[nPoints];
+            int index = 0;
+            for (Map<String, Object> point : data)
+            {
+                Map<String, Object> pose = (Map<String, Object>)point.get("Pose");
+                Map<String, Object> aPosition = (Map<String, Object>)pose.get("Position");
+                double x = (Double)aPosition.get("X");
+                double y = (Double)aPosition.get("Y");
+                path[index] = new Position(x, y);
+                index++;
             }
-
-            //path = positions.toArray();
-
-            Iterator<String> iterator = companyList.iterator();
-            while (iterator.hasNext()) {
-                System.out.println(iterator.next());
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Found path. First position is: ");
+            System.out.println(path[0].getX() + ":" + path[0].getY());
+            return path;
+        } catch(FileNotFoundException e){
+            System.out.println("File not found. ");
+        } catch(IOException e){
+            System.out.println("IOException. ");
         }
+        System.out.println("Null path");
+        return null;
     }
 
     /**
@@ -101,7 +104,6 @@ public class TestRobot3
     {
         return lr.getPosition();
     }
-
 
 }
 
