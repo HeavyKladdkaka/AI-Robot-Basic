@@ -1,14 +1,14 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 public class TestRobot3
 {
     private double robotHeading;
     private RobotCommunication robotcomm;  // communication drivers
     private Position[] path;
+    private LinkedList<Position> pathQueue;
     private Position robotPosition;
 
     /**
@@ -19,6 +19,7 @@ public class TestRobot3
     public TestRobot3(String host, int port)
     {
         robotcomm = new RobotCommunication(host, port);
+        pathQueue = new LinkedList<>();
     }
 
     /**
@@ -39,13 +40,16 @@ public class TestRobot3
     {
         path = SetRobotPath("./input/Path-around-table.json");
 
-        while(true){
+        while(!pathQueue.isEmpty()){
             double[] coordinates = getPosition(new LocalizationResponse());
             robotHeading = getHeadingAngle(new LocalizationResponse());
             robotPosition = new Position(coordinates[0], coordinates[2]);
 
+            MoveRobotToPosition(pathQueue.poll());
+
             System.out.println("Position: "+ robotPosition);
             System.out.println("Heading: "+ robotHeading);
+            
         }
     }
 
@@ -68,6 +72,7 @@ public class TestRobot3
                 double x = (Double)aPosition.get("X");
                 double y = (Double)aPosition.get("Y");
                 path[index] = new Position(x, y);
+                pathQueue.add(path[index]);
                 index++;
             }
             System.out.println("Found path. First position is: ");
@@ -103,6 +108,29 @@ public class TestRobot3
     double[] getPosition(LocalizationResponse lr)
     {
         return lr.getPosition();
+    }
+
+    void MoveRobotToPosition(Position position){
+        
+        DifferentialDriveRequest dr = CalculateDrive(position);
+
+        try{
+            robotcomm.putRequest(dr);
+        } catch(Exception e){
+            System.out.println("Moving robot failed. ");
+        }
+    }
+
+    DifferentialDriveRequest CalculateDrive(Position nextPosition){
+        
+        DifferentialDriveRequest dr = new DifferentialDriveRequest();
+
+        double bearing = robotPosition.getBearingTo(nextPosition);
+
+        dr.setLinearSpeed(1);
+        dr.setAngularSpeed(bearing);
+
+        return dr;
     }
 
 }
