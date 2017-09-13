@@ -69,14 +69,18 @@ public class TestRobot4
 
     private void run(Position[] path) throws Exception
     {
+        Position robotPosition;
+        double distance = 2;
+        Position goToPosition;
         RobotCommunication robotcomm = new RobotCommunication(host, port);
         LocalizationResponse lr = new LocalizationResponse(); // response
         DifferentialDriveRequest dr = new DifferentialDriveRequest(); // request
         // THIS IS THE PLACE FOR THE ALGORITHM!
-        dr.setAngularSpeed(Math.PI * 0.25); // set up the request to move in a circle
-        dr.setLinearSpeed(1.0);
-        int rc = robotcomm.putRequest(dr); // move
-        for (int i = 0; i < 16; i++)
+        //dr.setAngularSpeed(Math.PI * 0.25); // set up the request to move in
+        // a circle
+        //dr.setLinearSpeed(1.0);
+        //int rc = robotcomm.putRequest(dr); // move
+        for (int i = 0; i < path.length; i++)
         {
             // wait a second
             robotcomm.getResponse(lr); // ask the robot about its position and angle
@@ -85,11 +89,23 @@ public class TestRobot4
             double [] position = getPosition(lr);
             System.out.println("position = " + position[0] + ", " +
                     position[1]);
+
+            robotPosition = new Position(position);
+
+            if((robotPosition.getDistanceTo(path[i]) > distance) && (i != 0)){
+
+                goToPosition = path[i-1];
+            }
+            else if((robotPosition.getDistanceTo(path[i]) > distance) && (i
+                    == 0)){
+
+                goToPosition = path[i];
+            }
         }
 // set up request to stop the robot
         dr.setLinearSpeed(0);
         dr.setAngularSpeed(0);
-        rc = robotcomm.putRequest(dr);
+        //rc = robotcomm.putRequest(dr);
 
     }
 
