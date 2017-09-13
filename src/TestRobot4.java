@@ -16,6 +16,7 @@ import org.json.simple.parser.JSONParser;
 public class TestRobot4
 {
     private RobotCommunication robotcomm;  // communication drivers
+    private Position[] path;
 
     private String host;
     private int port;
@@ -62,15 +63,16 @@ public class TestRobot4
         System.out.println("Creating Robot");
         TestRobot4 robot = new TestRobot4("http://127.0.0.1", 50000);
 
-        robot.run();
+        robot.run(path);
     }
 
 
-    private void run() throws Exception
+    private void run(Position[] path) throws Exception
     {
         RobotCommunication robotcomm = new RobotCommunication(host, port);
         LocalizationResponse lr = new LocalizationResponse(); // response
         DifferentialDriveRequest dr = new DifferentialDriveRequest(); // request
+        // THIS IS THE PLACE FOR THE ALGORITHM!
         dr.setAngularSpeed(Math.PI * 0.25); // set up the request to move in a circle
         dr.setLinearSpeed(1.0);
         int rc = robotcomm.putRequest(dr); // move
@@ -81,7 +83,8 @@ public class TestRobot4
             double angle = lr.getHeadingAngle();
             System.out.println("heading = " + angle);
             double [] position = getPosition(lr);
-            System.out.println("position = " + position[0] + ", " + position[1]);
+            System.out.println("position = " + position[0] + ", " +
+                    position[1]);
         }
 // set up request to stop the robot
         dr.setLinearSpeed(0);
