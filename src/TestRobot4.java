@@ -17,6 +17,8 @@ public class TestRobot4
 {
     private RobotCommunication robotcomm;  // communication drivers
     private Position[] path;
+    public double[] position;
+    public double angle;
 
     private String host;
     private int port;
@@ -75,33 +77,55 @@ public class TestRobot4
         RobotCommunication robotcomm = new RobotCommunication(host, port);
         LocalizationResponse lr = new LocalizationResponse(); // response
         DifferentialDriveRequest dr = new DifferentialDriveRequest(); // request
+
+        Thread responseThread = new Thread(){
+            @Override
+            public void run(){
+
+                try {
+                    robotcomm.getResponse(lr); // ask the robot about its position and angle
+                    angle = lr.getHeadingAngle();
+                    System.out.println("heading = " + angle);
+                    position = getPosition(lr);
+                    System.out.println("position = " + position[0] + ", " +
+                            position[1]);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        };
+
         // THIS IS THE PLACE FOR THE ALGORITHM!
         //dr.setAngularSpeed(Math.PI * 0.25); // set up the request to move in
         // a circle
         //dr.setLinearSpeed(1.0);
         //int rc = robotcomm.putRequest(dr); // move
-        for (int i = 0; i < path.length; i++)
+        int i = 0;
+        do
         {
-            // wait a second
-            robotcomm.getResponse(lr); // ask the robot about its position and angle
-            double angle = lr.getHeadingAngle();
-            System.out.println("heading = " + angle);
-            double [] position = getPosition(lr);
-            System.out.println("position = " + position[0] + ", " +
-                    position[1]);
+            responseThread.run();
 
             robotPosition = new Position(position);
 
             if((robotPosition.getDistanceTo(path[i]) > distance) && (i != 0)){
 
                 goToPosition = path[i-1];
+
+                robotPosition.getBearingTo(goToPosition);
+
+
             }
             else if((robotPosition.getDistanceTo(path[i]) > distance) && (i
                     == 0)){
 
-                goToPosition = path[i];
+                throw new IllegalStateException("Bad look ahead distance, the" +
+                        " look ahead distance is too short...");
             }
-        }
+
+            i++;
+
+
+        }while(robotPosition != path[path.length-1]);
 // set up request to stop the robot
         dr.setLinearSpeed(0);
         dr.setAngularSpeed(0);
