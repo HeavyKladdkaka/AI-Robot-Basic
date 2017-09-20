@@ -18,12 +18,12 @@
       <file leaf-file-name="TestRobot3.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TestRobot3.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="489">
-              <caret line="168" column="35" lean-forward="false" selection-start-line="168" selection-start-column="35" selection-end-line="168" selection-end-column="35" />
+            <state relative-caret-position="383">
+              <caret line="162" column="35" lean-forward="false" selection-start-line="162" selection-start-column="35" selection-end-line="162" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#4421#4422#0" expanded="true" />
-                <element signature="e#4460#4461#0" expanded="true" />
+                <element signature="e#4428#4429#0" expanded="true" />
+                <element signature="e#4467#4468#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -623,7 +623,14 @@
       <option name="project" value="LOCAL" />
       <updated>1505900544310</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Incremental turning">
+      <created>1505901008789</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1505901008789</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -677,7 +684,8 @@
     <MESSAGE value="Robot is moving! Now trying to move right." />
     <MESSAGE value="Providing more accurate turning and feedback" />
     <MESSAGE value="Try turning" />
-    <option name="LAST_COMMIT_MESSAGE" value="Try turning" />
+    <MESSAGE value="Incremental turning" />
+    <option name="LAST_COMMIT_MESSAGE" value="Incremental turning" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -880,8 +888,8 @@
           <caret line="56" column="41" lean-forward="true" selection-start-line="56" selection-start-column="41" selection-end-line="56" selection-end-column="41" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4421#4422#0" expanded="true" />
-            <element signature="e#4460#4461#0" expanded="true" />
+            <element signature="e#4428#4429#0" expanded="true" />
+            <element signature="e#4467#4468#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1086,12 +1094,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TestRobot3.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="489">
-          <caret line="168" column="35" lean-forward="false" selection-start-line="168" selection-start-column="35" selection-end-line="168" selection-end-column="35" />
+        <state relative-caret-position="383">
+          <caret line="162" column="35" lean-forward="false" selection-start-line="162" selection-start-column="35" selection-end-line="162" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4421#4422#0" expanded="true" />
-            <element signature="e#4460#4461#0" expanded="true" />
+            <element signature="e#4428#4429#0" expanded="true" />
+            <element signature="e#4467#4468#0" expanded="true" />
           </folding>
         </state>
       </provider>

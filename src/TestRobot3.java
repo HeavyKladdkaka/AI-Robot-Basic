@@ -22,7 +22,7 @@ public class TestRobot3
     {
         this.host = host;
         this.port = port;
-        this.margin = 0.01f;
+        this.margin = 0.1f;
 
         pathQueue = new LinkedList<>();
     }
@@ -61,10 +61,10 @@ public class TestRobot3
 
             MoveRobotToPosition(nextPosition, robotHeading);
 
-            System.out.println("Robot: " + robotPosition.getX() + "." +
-                    robotPosition.getY());
-            System.out.println("Next: " + nextPosition.getX() + "." +
-                    nextPosition.getY());
+            //System.out.println("Robot: " + robotPosition.getX() + "." +
+            //        robotPosition.getY());
+            //System.out.println("Next: " + nextPosition.getX() + "." +
+            //        nextPosition.getY());
             System.out.println("Heading: "+ robotHeading);
 
             if(Math.abs(robotPosition.getDistanceTo(nextPosition)) <= margin){
@@ -160,18 +160,15 @@ public class TestRobot3
 
         double bearing = robotPosition.getBearingTo(nextPosition);
 
+        System.out.println("Bearing: "+ bearing);
+
         if(bearing == robotHeading){
             dr.setLinearSpeed(1);
-        } else if (bearing > robotHeading){
-            dr.setAngularSpeed(0.01);
-            dr.setLinearSpeed(0);
+            dr.setAngularSpeed(0);
         } else {
-            dr.setAngularSpeed(-0.01);
             dr.setLinearSpeed(0);
+            dr.setAngularSpeed((bearing - robotHeading) * Math.PI);
         }
-
-
-        //dr.setAngularSpeed((bearing - robotHeading) * Math.PI);
 
         return dr;
     }
