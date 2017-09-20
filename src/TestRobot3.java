@@ -5,10 +5,10 @@ import java.util.*;
 
 public class TestRobot3
 {
-    private double robotHeading;
+    private double robotHeading, margin;
     private int port;
     private String host;
-    private RobotCommunication robotcomm;  // communication drivers
+    private RobotCommunication robotcomm;
     private Position[] path;
     private LinkedList<Position> pathQueue;
     private Position robotPosition;
@@ -20,9 +20,10 @@ public class TestRobot3
      */
     public TestRobot3(String host, int port)
     {
-        //robotcomm = new RobotCommunication(host, port);
         this.host = host;
         this.port = port;
+        this.margin = 0.01f;
+
         pathQueue = new LinkedList<>();
     }
 
@@ -48,13 +49,24 @@ public class TestRobot3
 
         path = SetRobotPath("./input/Path-around-table.json");
 
+        Position nextPosition;
+
         while(!pathQueue.isEmpty()){
             robotcomm.getResponse(lr);
             double[] coordinates = getPosition(lr);
             robotHeading = getHeadingAngle(lr);
             robotPosition = new Position(coordinates[0], coordinates[2]);
 
-            MoveRobotToPosition(pathQueue.poll());
+            nextPosition = pathQueue.peek();
+
+            MoveRobotToPosition(nextPosition);
+
+            if(Math.abs(robotPosition.getDistanceTo(nextPosition)) <= margin){
+                pathQueue.pollLast();
+                System.out.println("Robot moved super good!");
+            } else {
+                System.out.println("Robot wont move good. ");
+            }
 
             System.out.println("Position: "+ robotPosition);
             System.out.println("Heading: "+ robotHeading);
@@ -124,7 +136,7 @@ public class TestRobot3
         return lr.getPosition();
     }
 
-    void MoveRobotToPosition(Position position){
+    private void MoveRobotToPosition(Position position){
         
         DifferentialDriveRequest dr = CalculateDrive(position);
 
@@ -135,7 +147,7 @@ public class TestRobot3
         }
     }
 
-    DifferentialDriveRequest CalculateDrive(Position nextPosition){
+    private DifferentialDriveRequest CalculateDrive(Position nextPosition){
         
         DifferentialDriveRequest dr = new DifferentialDriveRequest();
 
