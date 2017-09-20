@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="efcebfbf-8ab9-4da0-a969-75578eb6663f" name="Default" comment="Providing more accurate turning and feedback">
+    <list default="true" id="efcebfbf-8ab9-4da0-a969-75578eb6663f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/TestRobot3.java" afterPath="$PROJECT_DIR$/src/TestRobot3.java" />
     </list>
@@ -18,13 +18,23 @@
       <file leaf-file-name="TestRobot3.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TestRobot3.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="533">
-              <caret line="166" column="9" lean-forward="true" selection-start-line="166" selection-start-column="9" selection-end-line="166" selection-end-column="9" />
+            <state relative-caret-position="537">
+              <caret line="171" column="10" lean-forward="false" selection-start-line="171" selection-start-column="10" selection-end-line="171" selection-end-column="10" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#4421#4422#0" expanded="true" />
                 <element signature="e#4460#4461#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TestRobot2.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/TestRobot2.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="246">
+              <caret line="26" column="57" lean-forward="false" selection-start-line="26" selection-start-column="57" selection-end-line="26" selection-end-column="57" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -592,7 +602,14 @@
       <option name="project" value="LOCAL" />
       <updated>1505897302248</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Try turning">
+      <created>1505898381203</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1505898381203</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -645,7 +662,8 @@
     <MESSAGE value="lr" />
     <MESSAGE value="Robot is moving! Now trying to move right." />
     <MESSAGE value="Providing more accurate turning and feedback" />
-    <option name="LAST_COMMIT_MESSAGE" value="Providing more accurate turning and feedback" />
+    <MESSAGE value="Try turning" />
+    <option name="LAST_COMMIT_MESSAGE" value="Try turning" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -980,17 +998,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/TestRobot2.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="26" column="57" lean-forward="false" selection-start-line="26" selection-start-column="57" selection-end-line="26" selection-end-column="57" />
-          <folding>
-            <element signature="e#2796#2797#0" expanded="false" />
-            <element signature="e#2835#2836#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/RobotCommunication.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="278">
@@ -1055,10 +1062,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/TestRobot2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="26" column="57" lean-forward="false" selection-start-line="26" selection-start-column="57" selection-end-line="26" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/TestRobot3.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="533">
-          <caret line="166" column="9" lean-forward="true" selection-start-line="166" selection-start-column="9" selection-end-line="166" selection-end-column="9" />
+        <state relative-caret-position="537">
+          <caret line="171" column="10" lean-forward="false" selection-start-line="171" selection-start-column="10" selection-end-line="171" selection-end-column="10" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#4421#4422#0" expanded="true" />

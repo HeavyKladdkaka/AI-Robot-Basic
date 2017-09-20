@@ -162,11 +162,14 @@ public class TestRobot3
 
         if(bearing - robotHeading == 0){
             dr.setLinearSpeed(0);
-        } else {
+        } else if (bearing > robotHeading){
+            dr.setAngularSpeed(0.1);
             dr.setLinearSpeed(0.1);
+        } else {
+            dr.setAngularSpeed(-0.1);
         }
 
-        dr.setAngularSpeed(bearing - robotHeading);
+        //dr.setAngularSpeed((bearing - robotHeading) * Math.PI);
 
         return dr;
     }
