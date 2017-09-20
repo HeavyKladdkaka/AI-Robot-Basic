@@ -6,6 +6,8 @@ import java.util.*;
 public class TestRobot3
 {
     private double robotHeading;
+    private int port;
+    private String host;
     private RobotCommunication robotcomm;  // communication drivers
     private Position[] path;
     private LinkedList<Position> pathQueue;
@@ -18,7 +20,9 @@ public class TestRobot3
      */
     public TestRobot3(String host, int port)
     {
-        robotcomm = new RobotCommunication(host, port);
+        //robotcomm = new RobotCommunication(host, port);
+        this.host = host;
+        this.port = port;
         pathQueue = new LinkedList<>();
     }
 
@@ -38,6 +42,8 @@ public class TestRobot3
 
     public void run() throws Exception
     {
+        robotcomm = new RobotCommunication(host, port);
+
         LocalizationResponse lr = new LocalizationResponse();
 
         path = SetRobotPath("./input/Path-around-table.json");
@@ -58,19 +64,24 @@ public class TestRobot3
     Position[] SetRobotPath(String filename){
         File pathFile = new File(filename);
         try{
-            BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(pathFile)));
+            BufferedReader in = new BufferedReader(new InputStreamReader
+                    (new FileInputStream(pathFile)));
 
             ObjectMapper mapper = new ObjectMapper();
 
             // read the path from the file
-            Collection<Map<String, Object>> data = (Collection<Map<String, Object>>) mapper.readValue(in, Collection.class);
+            Collection<Map<String, Object>> data =
+                    (Collection<Map<String, Object>>) mapper.readValue
+                            (in, Collection.class);
             int nPoints = data.size();
             path = new Position[nPoints];
             int index = 0;
             for (Map<String, Object> point : data)
             {
-                Map<String, Object> pose = (Map<String, Object>)point.get("Pose");
-                Map<String, Object> aPosition = (Map<String, Object>)pose.get("Position");
+                Map<String, Object> pose =
+                        (Map<String, Object>)point.get("Pose");
+                Map<String, Object> aPosition =
+                        (Map<String, Object>)pose.get("Position");
                 double x = (Double)aPosition.get("X");
                 double y = (Double)aPosition.get("Y");
                 path[index] = new Position(x, y);
