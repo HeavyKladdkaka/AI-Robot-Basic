@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +25,7 @@ public class TestRobot4
 
     private String host;
     private int port;
+    private LinkedList pathQueue;
     /**
      * Create a robot connected to host "host" at port "port"
      * @param host normally http://127.0.0.1
@@ -33,6 +35,7 @@ public class TestRobot4
     {
         this.host = host;
         this.port = port;
+        this.pathQueue = new LinkedList<>();
     }
 
     /**
@@ -43,7 +46,7 @@ public class TestRobot4
      */
     public static void main(String[] args) throws Exception
     {
-        File pathFile = new File
+        /*File pathFile = new File
                 ("/Users/Aron/Documents/AI-Robot-Basic-master/input/Path" +
                         "-around-table.json");
         BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -65,25 +68,29 @@ public class TestRobot4
             index++;
         }
         System.out.println("Creating Robot");
-        TestRobot4 robot = new TestRobot4("http://127.0.0.1", 50000);
+        TestRobot4 robot = new TestRobot4("http://127.0.0.1", 50000);*/
 
-        robot.run(path);
+        System.out.println("Creating Robot4");
+        TestRobot4 robot = new TestRobot4("http://127.0.0.1", 50000);
+        robot.run();
     }
 
 
-    private void run(Position[] path) throws Exception
+    private void run() throws Exception
     {
+        robotcomm = new RobotCommunication(host, port);
         Position robotPosition;
         double distance = 2;
-        Position goToPosition;
         RobotCommunication robotcomm = new RobotCommunication(host, port);
+        pathQueue = SetRobotPath("./input/Path-around-table.json");
+        LocalizationResponse lr = new LocalizationResponse(); // response
+        Position goToPosition = (Position)pathQueue.peek();
 
         Thread responseThread = new Thread(){
             @Override
             public void run(){
 
                 try {
-                    LocalizationResponse lr = new LocalizationResponse(); // response
                     dr = new DifferentialDriveRequest(); // request
                     robotcomm.getResponse(lr); // ask the robot about its position and angle
                     angle = lr.getHeadingAngle();
@@ -97,57 +104,107 @@ public class TestRobot4
             }
         };
 
-        responseThread.run();
-
         // THIS IS THE PLACE FOR THE ALGORITHM!
         //dr.setAngularSpeed(Math.PI * 0.25); // set up the request to move in
         // a circle
         //dr.setLinearSpeed(1.0);
         //int rc = robotcomm.putRequest(dr); // move
-        int i = 0;
+        boolean goToPositionSet = false;
         do
         {
+            responseThread.run();
 
             robotPosition = new Position(position);
 
-            if((robotPosition.getDistanceTo(path[i]) > distance) && (i != 0)){
+            if((robotPosition.getDistanceTo((Position)pathQueue.peek()) <
+                    distance) && (!goToPositionSet)){
 
-                goToPosition = path[i-1];
-
-                newPositionAngle = robotPosition.getBearingTo(goToPosition);
-
-                moveRobot();
-
+                goToPosition = (Position)pathQueue.pop();
+                goToPositionSet = true;
             }
-            else if((robotPosition.getDistanceTo(path[i]) > distance) && (i
-                    == 0)){
+            else if((robotPosition.getDistanceTo((Position)pathQueue.peek())
+                    > distance) && (!goToPositionSet)){
 
                 throw new IllegalStateException("Bad look ahead distance, the" +
                         " look ahead distance is too short...");
             }
+            else if((robotPosition.getDistanceTo((Position)pathQueue.peek()) >
+                    distance) && (goToPositionSet)){
 
-            i++;
+                newPositionAngle = robotPosition.getBearingTo(goToPosition);
 
+                moveRobot();
+            }
+            else if(goToPositionSet){
+                newPositionAngle = robotPosition.getBearingTo(goToPosition);
+                moveRobot();
+            }
 
         }while(robotPosition != path[path.length-1]);
         // set up request to stop the robot
         dr.setLinearSpeed(0);
         dr.setAngularSpeed(0);
-        //rc = robotcomm.putRequest(dr);
 
     }
 
-    void moveRobot(){
+    private void moveRobot(){
 
-        if((angle - newPositionAngle) == 0){
+        DifferentialDriveRequest dr = new DifferentialDriveRequest();
+
+        if(((angle - newPositionAngle) < 30) && ((angle - newPositionAngle) <
+                30)){
             dr.setLinearSpeed(1.0);
         }
         else if((angle - newPositionAngle) < 0){
-            dr.setAngularSpeed(-2);
+            dr.setAngularSpeed(0.1);
         }
         else if((angle - newPositionAngle) > 0){
-            dr.setAngularSpeed(2);
+            dr.setAngularSpeed(-0.1);
         }
+        try {
+            robotcomm.putRequest(dr);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    LinkedList SetRobotPath(String filename){
+        File pathFile = new File(filename);
+        try{
+            BufferedReader in = new BufferedReader(new InputStreamReader
+                    (new FileInputStream(pathFile)));
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            // read the path from the file
+            Collection<Map<String, Object>> data =
+                    (Collection<Map<String, Object>>) mapper.readValue
+                            (in, Collection.class);
+            int nPoints = data.size();
+            path = new Position[nPoints];
+            int index = 0;
+            for (Map<String, Object> point : data)
+            {
+                Map<String, Object> pose =
+                        (Map<String, Object>)point.get("Pose");
+                Map<String, Object> aPosition =
+                        (Map<String, Object>)pose.get("Position");
+                double x = (Double)aPosition.get("X");
+                double y = (Double)aPosition.get("Y");
+                path[index] = new Position(x, y);
+                pathQueue.add(new Position(x, y));
+                index++;
+            }
+            System.out.println("Found path. First position is: ");
+            System.out.println(path[0].getX() + ":" + path[0].getY());
+            return pathQueue;
+        } catch(FileNotFoundException e){
+            System.out.println("File not found. ");
+        } catch(IOException e){
+            System.out.println("IOException. ");
+        }
+        System.out.println("Null path");
+        return null;
     }
 
     /**
