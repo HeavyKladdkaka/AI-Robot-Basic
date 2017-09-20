@@ -169,6 +169,7 @@ public class TestRobot3
             dr.setAngularSpeed(-0.1);
         }
 
+
         //dr.setAngularSpeed((bearing - robotHeading) * Math.PI);
 
         return dr;
