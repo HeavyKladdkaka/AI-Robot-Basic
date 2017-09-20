@@ -59,7 +59,13 @@ public class TestRobot3
 
             nextPosition = pathQueue.peek();
 
-            MoveRobotToPosition(nextPosition);
+            MoveRobotToPosition(nextPosition, robotHeading);
+
+            System.out.println("Robot: " + robotPosition.getX() + "." +
+                    robotPosition.getY());
+            System.out.println("Next: " + nextPosition.getX() + "." +
+                    nextPosition.getY());
+            System.out.println("Heading: "+ robotHeading);
 
             if(Math.abs(robotPosition.getDistanceTo(nextPosition)) <= margin){
                 pathQueue.pollLast();
@@ -68,9 +74,8 @@ public class TestRobot3
                 System.out.println("Robot wont move good. ");
             }
 
-            System.out.println("Position: "+ robotPosition);
-            System.out.println("Heading: "+ robotHeading);
-            
+            //System.out.println("Position: "+ robotPosition);
+
         }
     }
 
@@ -136,9 +141,10 @@ public class TestRobot3
         return lr.getPosition();
     }
 
-    private void MoveRobotToPosition(Position position){
+    private void MoveRobotToPosition(Position position,
+                                     double robotHeading){
         
-        DifferentialDriveRequest dr = CalculateDrive(position);
+        DifferentialDriveRequest dr = CalculateDrive(position, robotHeading);
 
         try{
             robotcomm.putRequest(dr);
@@ -147,14 +153,23 @@ public class TestRobot3
         }
     }
 
-    private DifferentialDriveRequest CalculateDrive(Position nextPosition){
+    private DifferentialDriveRequest CalculateDrive(Position nextPosition,
+                                                    double robotHeading){
         
         DifferentialDriveRequest dr = new DifferentialDriveRequest();
 
         double bearing = robotPosition.getBearingTo(nextPosition);
 
-        dr.setLinearSpeed(1);
-        dr.setAngularSpeed(bearing);
+        if(bearing > robotHeading){
+            dr.setAngularSpeed(bearing);
+        } else if (bearing < robotHeading){
+            dr.setAngularSpeed(-bearing);
+        } else {
+            dr.setAngularSpeed(0);
+        }
+
+        dr.setLinearSpeed(0.1);
+        //dr.setAngularSpeed(bearing);
 
         return dr;
     }
