@@ -17,8 +17,9 @@ public class TestRobot4
 {
     private RobotCommunication robotcomm;  // communication drivers
     private Position[] path;
-    public double[] position;
-    public double angle;
+    private double[] position;
+    private double angle;
+    private double newPositionAngle;
 
     private String host;
     private int port;
@@ -111,9 +112,17 @@ public class TestRobot4
 
                 goToPosition = path[i-1];
 
-                robotPosition.getBearingTo(goToPosition);
+                newPositionAngle = robotPosition.getBearingTo(goToPosition);
 
-
+                if((angle - newPositionAngle) == 0){
+                    dr.setLinearSpeed(1.0);
+                }
+                else if((angle - newPositionAngle) < 0){
+                    dr.setAngularSpeed(-2);
+                }
+                else if((angle - newPositionAngle) > 0){
+                    dr.setAngularSpeed(2);
+                }
             }
             else if((robotPosition.getDistanceTo(path[i]) > distance) && (i
                     == 0)){
