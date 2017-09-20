@@ -160,13 +160,14 @@ public class TestRobot3
 
         double bearing = robotPosition.getBearingTo(nextPosition);
 
-        if(bearing - robotHeading == 0){
-            dr.setLinearSpeed(0);
+        if(bearing == robotHeading){
+            dr.setLinearSpeed(1);
         } else if (bearing > robotHeading){
-            dr.setAngularSpeed(0.1);
-            dr.setLinearSpeed(0.1);
+            dr.setAngularSpeed(0.01);
+            dr.setLinearSpeed(0);
         } else {
-            dr.setAngularSpeed(-0.1);
+            dr.setAngularSpeed(-0.01);
+            dr.setLinearSpeed(0);
         }
 
 
