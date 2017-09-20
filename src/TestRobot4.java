@@ -17,8 +17,10 @@ public class TestRobot4
 {
     private RobotCommunication robotcomm;  // communication drivers
     private Position[] path;
-    public double[] position;
-    public double angle;
+    private double[] position;
+    private double angle;
+    private double newPositionAngle;
+    private DifferentialDriveRequest dr;
 
     private String host;
     private int port;
@@ -75,14 +77,14 @@ public class TestRobot4
         double distance = 2;
         Position goToPosition;
         RobotCommunication robotcomm = new RobotCommunication(host, port);
-        LocalizationResponse lr = new LocalizationResponse(); // response
-        DifferentialDriveRequest dr = new DifferentialDriveRequest(); // request
 
         Thread responseThread = new Thread(){
             @Override
             public void run(){
 
                 try {
+                    LocalizationResponse lr = new LocalizationResponse(); // response
+                    dr = new DifferentialDriveRequest(); // request
                     robotcomm.getResponse(lr); // ask the robot about its position and angle
                     angle = lr.getHeadingAngle();
                     System.out.println("heading = " + angle);
@@ -95,6 +97,8 @@ public class TestRobot4
             }
         };
 
+        responseThread.run();
+
         // THIS IS THE PLACE FOR THE ALGORITHM!
         //dr.setAngularSpeed(Math.PI * 0.25); // set up the request to move in
         // a circle
@@ -103,7 +107,6 @@ public class TestRobot4
         int i = 0;
         do
         {
-            responseThread.run();
 
             robotPosition = new Position(position);
 
@@ -111,8 +114,9 @@ public class TestRobot4
 
                 goToPosition = path[i-1];
 
-                robotPosition.getBearingTo(goToPosition);
+                newPositionAngle = robotPosition.getBearingTo(goToPosition);
 
+                moveRobot();
 
             }
             else if((robotPosition.getDistanceTo(path[i]) > distance) && (i
@@ -126,11 +130,24 @@ public class TestRobot4
 
 
         }while(robotPosition != path[path.length-1]);
-// set up request to stop the robot
+        // set up request to stop the robot
         dr.setLinearSpeed(0);
         dr.setAngularSpeed(0);
         //rc = robotcomm.putRequest(dr);
 
+    }
+
+    void moveRobot(){
+
+        if((angle - newPositionAngle) == 0){
+            dr.setLinearSpeed(1.0);
+        }
+        else if((angle - newPositionAngle) < 0){
+            dr.setAngularSpeed(-2);
+        }
+        else if((angle - newPositionAngle) > 0){
+            dr.setAngularSpeed(2);
+        }
     }
 
     /**
