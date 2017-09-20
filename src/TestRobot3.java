@@ -49,6 +49,7 @@ public class TestRobot3
         path = SetRobotPath("./input/Path-around-table.json");
 
         while(!pathQueue.isEmpty()){
+            robotcomm.getResponse(lr);
             double[] coordinates = getPosition(lr);
             robotHeading = getHeadingAngle(lr);
             robotPosition = new Position(coordinates[0], coordinates[2]);
