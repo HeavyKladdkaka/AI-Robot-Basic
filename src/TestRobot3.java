@@ -38,11 +38,13 @@ public class TestRobot3
 
     public void run() throws Exception
     {
+        LocalizationResponse lr = new LocalizationResponse();
+
         path = SetRobotPath("./input/Path-around-table.json");
 
         while(!pathQueue.isEmpty()){
-            double[] coordinates = getPosition(new LocalizationResponse());
-            robotHeading = getHeadingAngle(new LocalizationResponse());
+            double[] coordinates = getPosition(lr);
+            robotHeading = getHeadingAngle(lr);
             robotPosition = new Position(coordinates[0], coordinates[2]);
 
             MoveRobotToPosition(pathQueue.poll());
