@@ -177,6 +177,8 @@ public class TestRobot3
             speed = 0.5;
         } else if (angle > 0.1){
             speed = 1;
+        } else {
+            speed = 0.1;
         }
 
         DifferentialDriveRequest dr = new DifferentialDriveRequest();
