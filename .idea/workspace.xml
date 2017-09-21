@@ -18,8 +18,8 @@
       <file leaf-file-name="TestRobot3.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TestRobot3.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="317">
-              <caret line="180" column="24" lean-forward="false" selection-start-line="180" selection-start-column="24" selection-end-line="180" selection-end-column="24" />
+            <state relative-caret-position="164">
+              <caret line="166" column="26" lean-forward="false" selection-start-line="166" selection-start-column="26" selection-end-line="166" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -614,7 +614,14 @@
       <option name="project" value="LOCAL" />
       <updated>1505997133130</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Radians turnign">
+      <created>1505997268198</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1505997268199</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -1088,8 +1095,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TestRobot3.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="180" column="24" lean-forward="false" selection-start-line="180" selection-start-column="24" selection-end-line="180" selection-end-column="24" />
+        <state relative-caret-position="164">
+          <caret line="166" column="26" lean-forward="false" selection-start-line="166" selection-start-column="26" selection-end-line="166" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

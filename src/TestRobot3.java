@@ -164,8 +164,8 @@ public class TestRobot3
 
         double distance = robotPosition.getDistanceTo(nextPosition);
 
-        double angle = Math.toRadians(Math.atan2(Math.cos(distance), Math.sin
-                (distance)));
+        //Angle in radians
+        double angle = Math.atan2(Math.cos(distance), Math.sin(distance));
 
         double speed = 0;
 
