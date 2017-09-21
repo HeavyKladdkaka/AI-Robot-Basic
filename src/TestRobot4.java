@@ -151,15 +151,17 @@ public class TestRobot4
 
         DifferentialDriveRequest dr = new DifferentialDriveRequest();
 
-        if(((angle - newPositionAngle) < 30) && ((angle - newPositionAngle) <
-                30)){
+        if(((angle - newPositionAngle) < 2) && ((angle - newPositionAngle) >
+                (-2))){
             dr.setLinearSpeed(1.0);
         }
         else if((angle - newPositionAngle) < 0){
-            dr.setAngularSpeed(0.1);
+            dr.setLinearSpeed(0.5);
+            dr.setAngularSpeed(-0.1);
         }
         else if((angle - newPositionAngle) > 0){
-            dr.setAngularSpeed(-0.1);
+            dr.setLinearSpeed(0.5);
+            dr.setAngularSpeed(1.0);
         }
         try {
             robotcomm.putRequest(dr);
