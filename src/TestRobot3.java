@@ -164,7 +164,8 @@ public class TestRobot3
 
         double distance = robotPosition.getDistanceTo(nextPosition);
 
-        double angle = Math.atan2(Math.cos(distance), Math.sin(distance));
+        double angle = Math.toRadians(Math.atan2(Math.cos(distance), Math.sin
+                (distance)));
 
         double speed = 0;
 
@@ -181,7 +182,6 @@ public class TestRobot3
         DifferentialDriveRequest dr = new DifferentialDriveRequest();
 
         System.out.println("Angle: " + angle);
-        System.out.println("AngleRadians: " + Math.toRadians(angle));
 
         dr.setLinearSpeed(speed);
         dr.setAngularSpeed(angle);
