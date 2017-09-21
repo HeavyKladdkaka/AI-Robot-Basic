@@ -54,15 +54,14 @@ public class TestRobot3
 
         while(!pathQueue.isEmpty()){
             robotcomm.getResponse(lr);
-            double[] coordinates = getPosition(lr);
             robotHeading = getHeadingAngle(lr);
-            robotPosition = new Position(coordinates[0], coordinates[2]);
+            robotPosition = getPosition(lr);
 
             nextPosition = pathQueue.peek();
 
             MoveRobotToPosition(nextPosition, robotHeading);
 
-            if(Math.abs(robotPosition.getDistanceTo(nextPosition)) <= margin){
+            if(robotPosition.getDistanceTo(nextPosition) <= margin){
                 pathQueue.pollLast();
                 System.out.println("Robot moved super good!");
             } else {
@@ -140,11 +139,12 @@ public class TestRobot3
     /**
      * Extract the position
      * @param lr
-     * @return coordinates
+     * @return Position
      */
-    double[] getPosition(LocalizationResponse lr)
+    Position getPosition(LocalizationResponse lr)
     {
-        return lr.getPosition();
+        double[] coordinates = lr.getPosition();
+        return new Position(coordinates[0], coordinates[2]);
     }
 
     private void MoveRobotToPosition(Position position,
@@ -163,16 +163,28 @@ public class TestRobot3
                                                     double robotHeading){
 
         double distance = robotPosition.getDistanceTo(nextPosition);
-        double bearing = robotPosition.getBearingTo(nextPosition);
 
         double angle = Math.atan2(Math.cos(distance), Math.sin(distance));
+
+        double speed = 0;
+
+        if(angle > 1.5){
+            speed = 0.1;
+        } else if (angle > 1){
+            speed = 0.3;
+        } else if(angle > 0.5){
+            speed = 0.5;
+        } else if (angle > 0.1){
+            speed = 1;
+        }
 
         DifferentialDriveRequest dr = new DifferentialDriveRequest();
 
         System.out.println("Angle: " + angle);
+        System.out.println("AngleRadians: " + Math.toRadians(angle));
 
-        dr.setLinearSpeed(0.1);
-        dr.setAngularSpeed(Math.toRadians(angle));
+        dr.setLinearSpeed(speed);
+        dr.setAngularSpeed(angle);
 
         return dr;
 
