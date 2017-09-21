@@ -22,7 +22,6 @@ public class TestRobot3
     {
         this.host = host;
         this.port = port;
-        this.margin = 0.00000001f;
 
         pathQueue = new LinkedList<>();
     }
@@ -49,6 +48,8 @@ public class TestRobot3
 
         path = SetRobotPath("./input/Path-around-table.json");
 
+        setRobotMargin();
+
         Position nextPosition;
 
         while(!pathQueue.isEmpty()){
@@ -61,21 +62,12 @@ public class TestRobot3
 
             MoveRobotToPosition(nextPosition, robotHeading);
 
-            //System.out.println("Robot: " + robotPosition.getX() + "." +
-            //        robotPosition.getY());
-            //System.out.println("Next: " + nextPosition.getX() + "." +
-            //        nextPosition.getY());
-            System.out.println("Heading: "+ robotHeading);
-
             if(Math.abs(robotPosition.getDistanceTo(nextPosition)) <= margin){
                 pathQueue.pollLast();
                 System.out.println("Robot moved super good!");
             } else {
                 System.out.println("Robot wont move good. ");
             }
-
-            //System.out.println("Position: "+ robotPosition);
-
         }
     }
 
@@ -116,6 +108,20 @@ public class TestRobot3
         }
         System.out.println("Null path");
         return null;
+    }
+
+    void setRobotMargin(){
+        double distanceBetweenPoints = 0;
+        for(int i = 0 ; i < path.length - 1 ; i++){
+            distanceBetweenPoints += path[i].getDistanceTo(path[i+1]);
+        }
+
+        distanceBetweenPoints /= path.length;
+
+        this.margin = distanceBetweenPoints/4;
+
+        System.out.println("Average distance between points: " + distanceBetweenPoints);
+        System.out.println("Margin: " + this.margin);
     }
 
     /**
