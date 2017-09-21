@@ -22,7 +22,7 @@ public class TestRobot3
     {
         this.host = host;
         this.port = port;
-        this.margin = 0.1f;
+        this.margin = 0.00000001f;
 
         pathQueue = new LinkedList<>();
     }
@@ -155,20 +155,18 @@ public class TestRobot3
 
     private DifferentialDriveRequest CalculateDrive(Position nextPosition,
                                                     double robotHeading){
-        
-        DifferentialDriveRequest dr = new DifferentialDriveRequest();
 
+        double distance = robotPosition.getDistanceTo(nextPosition);
         double bearing = robotPosition.getBearingTo(nextPosition);
 
-        System.out.println("Bearing: "+ bearing);
+        double angle = Math.atan2(Math.cos(distance), Math.sin(distance));
 
-        if(bearing == robotHeading){
-            dr.setLinearSpeed(1);
-            dr.setAngularSpeed(0);
-        } else {
-            dr.setLinearSpeed(0);
-            dr.setAngularSpeed((bearing - robotHeading) * Math.PI);
-        }
+        DifferentialDriveRequest dr = new DifferentialDriveRequest();
+
+        System.out.println("Angle: " + angle);
+
+        dr.setLinearSpeed(0.1);
+        dr.setAngularSpeed(Math.toRadians(angle));
 
         return dr;
     }
