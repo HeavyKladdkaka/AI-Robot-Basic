@@ -52,8 +52,7 @@ public class TestRobot3
 
         setRobotMargins();
 
-        //Position nextPosition = path[(path.length - 1) - stepsDone];
-        Position nextPosition = path[stepsDone];
+        Position nextPosition = path[(path.length - 1) - stepsDone];
 
         while(stepsDone < path.length){
             robotcomm.getResponse(lr);
@@ -62,10 +61,10 @@ public class TestRobot3
 
             MoveRobotToPosition(nextPosition, robotHeading);
 
-            if(robotPosition.getDistanceTo(nextPosition) <= linearMargin){
+            if(robotPosition.getDistanceTo
+                    (path[(path.length - 1) - stepsDone + 1]) <= linearMargin){
                 stepsDone++;
-                nextPosition = path[stepsDone];
-                //nextPosition = path[(path.length - 1) - stepsDone];
+                nextPosition = path[(path.length - 1) - stepsDone];
                 System.out.println("Steps left: " + (path.length - stepsDone));
             }
         }
@@ -124,7 +123,7 @@ public class TestRobot3
         distanceBetweenPoints /= path.length;
         angleBetweenPoints /= path.length;
 
-        this.linearMargin = distanceBetweenPoints/4;
+        this.linearMargin = distanceBetweenPoints;
         this.angularMargin = angleBetweenPoints/4;
 
         System.out.println("Path length: " + path.length);
