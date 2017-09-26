@@ -18,10 +18,11 @@
       <file leaf-file-name="TestRobot3.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TestRobot3.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="194">
-              <caret line="151" column="0" lean-forward="false" selection-start-line="151" selection-start-column="0" selection-end-line="151" selection-end-column="0" />
+            <state relative-caret-position="251">
+              <caret line="50" column="21" lean-forward="false" selection-start-line="50" selection-start-column="21" selection-end-line="50" selection-end-column="21" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="method#SetRobotPath#0;class#TestRobot3#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -826,7 +827,14 @@
       <option name="project" value="LOCAL" />
       <updated>1506431734790</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="changed while to do-while">
+      <created>1506432457491</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1506432457491</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -901,7 +909,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Try turning" />
     <MESSAGE value="Incremental turning" />
     <MESSAGE value="Prints bearing" />
     <MESSAGE value="Smart speed" />
@@ -926,24 +933,11 @@
     <MESSAGE value="Better loop" />
     <MESSAGE value="shit" />
     <MESSAGE value="moved lr and robotcomms to MoveRobot" />
-    <option name="LAST_COMMIT_MESSAGE" value="moved lr and robotcomms to MoveRobot" />
+    <MESSAGE value="changed while to do-while" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed while to do-while" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/TestRobot3.java</url>
-          <line>51</line>
-          <properties />
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/TestRobot3.java</url>
-          <line>150</line>
-          <properties />
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
       <option name="time" value="4" />
     </breakpoint-manager>
     <watches-manager />
@@ -1129,6 +1123,7 @@
           <caret line="56" column="41" lean-forward="true" selection-start-line="56" selection-start-column="41" selection-end-line="56" selection-end-column="41" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="method#SetRobotPath#0;class#TestRobot3#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1318,10 +1313,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TestRobot3.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="151" column="0" lean-forward="false" selection-start-line="151" selection-start-column="0" selection-end-line="151" selection-end-column="0" />
+        <state relative-caret-position="251">
+          <caret line="50" column="21" lean-forward="false" selection-start-line="50" selection-start-column="21" selection-end-line="50" selection-end-column="21" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="method#SetRobotPath#0;class#TestRobot3#0" expanded="false" />
           </folding>
         </state>
       </provider>

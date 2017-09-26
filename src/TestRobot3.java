@@ -48,7 +48,7 @@ public class TestRobot3
 
         SetRobotMargins();
 
-        for(int i = 1 ; i < path.length - 1 ; i++){
+        for(int i = 0 ; i < path.length - 1 ; i++){
             MoveRobotToPosition(i);
             System.out.println("Steps left: " + (path.length - i));
         }
@@ -109,7 +109,7 @@ public class TestRobot3
         distanceBetweenPoints /= path.length;
         angleBetweenPoints /= path.length;
 
-        this.linearMargin = distanceBetweenPoints/2;
+        this.linearMargin = distanceBetweenPoints;
         this.angularMargin = angleBetweenPoints/4;
 
         System.out.println("Path length: " + path.length);
