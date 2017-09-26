@@ -46,30 +46,6 @@ public class TestRobot4
      */
     public static void main(String[] args) throws Exception
     {
-        /*File pathFile = new File
-                ("/Users/Aron/Documents/AI-Robot-Basic-master/input/Path" +
-                        "-around-table.json");
-        BufferedReader in = new BufferedReader(new InputStreamReader(
-                new FileInputStream(pathFile)));
-        ObjectMapper mapper = new ObjectMapper();
-        // read the path from the file
-        Collection <Map<String, Object>> data =
-                (Collection<Map<String, Object>>) mapper.readValue(in, Collection.class);
-        int nPoints = data.size();
-        Position[] path = new Position[nPoints];
-        int index = 0;
-        for (Map<String, Object> point : data)
-        {
-            Map<String, Object> pose = (Map<String, Object>)point.get("Pose");
-            Map<String, Object> aPosition = (Map<String, Object>)pose.get("Position");
-            double x = (Double)aPosition.get("X");
-            double y = (Double)aPosition.get("Y");
-            path[index] = new Position(x, y);
-            index++;
-        }
-        System.out.println("Creating Robot");
-        TestRobot4 robot = new TestRobot4("http://127.0.0.1", 50000);*/
-
         System.out.println("Creating Robot4");
         TestRobot4 robot = new TestRobot4("http://127.0.0.1", 50000);
         robot.run();
@@ -80,12 +56,12 @@ public class TestRobot4
     {
         robotcomm = new RobotCommunication(host, port);
         Position robotPosition;
-        double distance = 0.30;
+        double distance = 0.15;
         RobotCommunication robotcomm = new RobotCommunication(host, port);
         pathQueue = SetRobotPath("./input/Path-around-table.json");
         LocalizationResponse lr = new LocalizationResponse(); // response
         boolean goToPositionSet = false;
-        Position goToPosition = (Position)pathQueue.peek();
+        Position goToPosition = (Position)pathQueue.poll();
 
         do
         {
@@ -105,7 +81,7 @@ public class TestRobot4
             if((robotPosition.getDistanceTo(goToPosition) <
                     distance)){
 
-                goToPosition = (Position) pathQueue.pop();
+                goToPosition = (Position) pathQueue.poll();
             }
             else if (robotPosition.getDistanceTo(goToPosition)
                     > distance && !goToPositionSet){
