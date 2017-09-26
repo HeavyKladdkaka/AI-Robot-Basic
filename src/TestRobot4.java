@@ -80,66 +80,42 @@ public class TestRobot4
     {
         robotcomm = new RobotCommunication(host, port);
         Position robotPosition;
-        double distance = 1;
+        double distance = 0.30;
         RobotCommunication robotcomm = new RobotCommunication(host, port);
         pathQueue = SetRobotPath("./input/Path-around-table.json");
         LocalizationResponse lr = new LocalizationResponse(); // response
+        boolean goToPositionSet = false;
         Position goToPosition = (Position)pathQueue.peek();
 
-        Thread responseThread = new Thread(){
-            @Override
-            public void run(){
-
-                try {
-                    dr = new DifferentialDriveRequest(); // request
-                    robotcomm.getResponse(lr); // ask the robot about its position and angle
-                    angle = getHeadingAngle(lr);
-                    System.out.println("heading = " + angle);
-                    position = getPosition(lr);
-                    System.out.println("position = " + position[0] + ", " +
-                            position[1]);
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        // THIS IS THE PLACE FOR THE ALGORITHM!
-        //dr.setAngularSpeed(Math.PI * 0.25); // set up the request to move in
-        // a circle
-        //dr.setLinearSpeed(1.0);
-        //int rc = robotcomm.putRequest(dr); // move
-        boolean goToPositionSet = false;
         do
         {
-            responseThread.run();
+            dr = new DifferentialDriveRequest(); // request
+            robotcomm.getResponse(lr); // ask the robot about its position and angle
+            angle = getHeadingAngle(lr);
+            System.out.println("heading = " + angle);
+            position = getPosition(lr);
+            System.out.println("position = " + position[0] + ", " +
+                    position[1]);
 
             robotPosition = new Position(position);
 
-            if((robotPosition.getDistanceTo((Position)pathQueue.peek()) <
-                    distance) && (!goToPositionSet)){
+            System.out.println("Distans till position är: " + robotPosition
+                    .getDistanceTo((Position)pathQueue.peek()));
 
-                goToPosition = (Position)pathQueue.pop();
+            if((robotPosition.getDistanceTo(goToPosition) <
+                    distance)){
+
+                goToPosition = (Position) pathQueue.pop();
+            }
+            else if (robotPosition.getDistanceTo(goToPosition)
+                    > distance && !goToPositionSet){
+
                 goToPositionSet = true;
             }
-            else if((robotPosition.getDistanceTo((Position)pathQueue.peek())
-                    > distance) && (!goToPositionSet)){
+            else if (goToPositionSet){
 
-                throw new IllegalStateException("Bad look ahead distance, the" +
-                        " look ahead distance is too short...");
-            }
-            else if((robotPosition.getDistanceTo((Position)pathQueue.peek()) >
-                    distance) && (goToPositionSet)){
-
-                newPositionAngle = robotPosition.getBearingTo
-                        (goToPosition);
-
-                moveRobot();
-            }
-            else if(goToPositionSet){
                 newPositionAngle = robotPosition.getBearingTo(goToPosition);
                 moveRobot();
-                goToPositionSet = false;
             }
 
         }while(robotPosition != path[path.length-1]);
@@ -153,16 +129,16 @@ public class TestRobot4
 
         DifferentialDriveRequest dr = new DifferentialDriveRequest();
 
-        if(((angle - newPositionAngle) < 1.5) && ((angle - newPositionAngle) >
-                (-1.5))){
+        if(((angle - newPositionAngle) < 2) && ((angle - newPositionAngle) >
+                (-2))){
             dr.setLinearSpeed(0.4);
         }
         else if((angle - newPositionAngle) < 0){
-            dr.setLinearSpeed(0.1);
+            dr.setLinearSpeed(0.2);
             dr.setAngularSpeed(0.2);
         }
         else if((angle - newPositionAngle) > 0){
-            dr.setLinearSpeed(0.1);
+            dr.setLinearSpeed(0.2);
             dr.setAngularSpeed(-0.2);
         }
         try {
@@ -220,8 +196,8 @@ public class TestRobot4
     {
         double e[] = lr.getOrientation();
 
-        double angle = 2 * Math.atan2(e[3], e[0]);
-        return angle * 180 / Math.PI;
+        double angle = Math.atan2(e[3], e[0]);
+        return angle;
     }
 
     /**
