@@ -48,7 +48,7 @@ public class TestRobot3
 
         SetRobotMargins();
 
-        for(int i = 0 ; i <= path.length ; i++){
+        for(int i = 1 ; i <= path.length ; i++){
             MoveRobotToPosition(i);
             System.out.println("Steps left: " + (path.length - i));
         }
@@ -106,7 +106,8 @@ public class TestRobot3
             distanceBetweenPoints += path[i].getDistanceTo(path[i+1]);
         }
 
-        this.lookAheadDistance = distanceBetweenPoints / path.length;
+        //this.lookAheadDistance = distanceBetweenPoints / path.length;
+        this.lookAheadDistance = 0.7;
 
         System.out.println("Path length: " + path.length);
         System.out.println("Average distance between points: " + distanceBetweenPoints);
@@ -157,7 +158,7 @@ public class TestRobot3
         double speed;
 
         angle = bearing - robotHeading;
-        speed = 0.1;
+        speed = 0.4;
 
         if(angle > Math.PI){
             angle -= 2 * Math.PI;
