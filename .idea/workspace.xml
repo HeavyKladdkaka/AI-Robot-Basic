@@ -18,8 +18,8 @@
       <file leaf-file-name="TestRobot3.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TestRobot3.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="301">
-              <caret line="62" column="31" lean-forward="false" selection-start-line="62" selection-start-column="12" selection-end-line="62" selection-end-column="31" />
+            <state relative-caret-position="235">
+              <caret line="183" column="26" lean-forward="false" selection-start-line="183" selection-start-column="26" selection-end-line="183" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -574,7 +574,14 @@
       <option name="project" value="LOCAL" />
       <updated>1506419554301</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Polled wrong">
+      <created>1506419953712</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1506419953712</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -667,7 +674,8 @@
     <MESSAGE value="parantes runt en uträkning i turningangle" />
     <MESSAGE value="changed heading return statement" />
     <MESSAGE value="stuff" />
-    <option name="LAST_COMMIT_MESSAGE" value="stuff" />
+    <MESSAGE value="Polled wrong" />
+    <option name="LAST_COMMIT_MESSAGE" value="Polled wrong" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1044,8 +1052,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TestRobot3.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="301">
-          <caret line="62" column="31" lean-forward="false" selection-start-line="62" selection-start-column="12" selection-end-line="62" selection-end-column="31" />
+        <state relative-caret-position="235">
+          <caret line="183" column="26" lean-forward="false" selection-start-line="183" selection-start-column="26" selection-end-line="183" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
