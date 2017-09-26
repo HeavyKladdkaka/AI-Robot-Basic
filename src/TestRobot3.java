@@ -142,8 +142,10 @@ public class TestRobot3
     {
         double e[] = lr.getOrientation();
 
-        double angle = 2 * Math.atan2(e[3], e[0]);
-        return angle * 180 / Math.PI;
+        //double angle = 2 * Math.atan2(e[3], e[0]);
+        //return angle * 180 / Math.PI;
+
+        return Math.atan2(e[3], e[0]);
     }
 
     /**
@@ -178,11 +180,11 @@ public class TestRobot3
         double angle;
         double speed;
 
-        if(Math.abs(robotHeading) > Math.abs(bearing)-this.angularMargin){
-            angle = (bearing - robotHeading)/240;
-        } else {
-            angle = 0;
-        }
+        angle = bearing - robotHeading;
+
+        //if(Math.abs(robotHeading) > Math.abs(bearing)-this.angularMargin){
+        //    angle = bearing - robotHeading;
+        //}
 
         speed = 0.3;
 
