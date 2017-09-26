@@ -43,32 +43,33 @@ public class TestRobot3
     public void run() throws Exception
     {
         robotcomm = new RobotCommunication(host, port);
-        Position nextPosition;
 
         LocalizationResponse lr = new LocalizationResponse();
 
         path = SetRobotPath("./input/Path-around-table.json");
 
-        setRobotMargins();
+        SetRobotMargins();
 
         for(int i = 0 ; i < path.length ; i++){
             robotcomm.getResponse(lr);
             robotHeading = getHeadingAngle(lr);
             robotPosition = getPosition(lr);
 
-            while(robotPosition.getDistanceTo(path[i]) > linearMargin){
-                MoveRobotToPosition(path[i+1], robotHeading);
-            }
+            MoveRobotToPosition(robotHeading, i);
 
             System.out.println("Steps left: " + (path.length - i));
 
         }
+
+        MoveRobotToFinalPosition(robotHeading);
+
         HaltRobotMovement();
+
         System.out.println("Robot is done. ");
 
     }
 
-    Position[] SetRobotPath(String filename){
+    private Position[] SetRobotPath(String filename){
         File pathFile = new File(filename);
         try{
             BufferedReader in = new BufferedReader(new InputStreamReader
@@ -107,7 +108,7 @@ public class TestRobot3
         return null;
     }
 
-    void setRobotMargins(){
+    private void SetRobotMargins(){
         double distanceBetweenPoints = 0;
         double angleBetweenPoints = 0;
         for(int i = 0 ; i < path.length - 1 ; i++){
@@ -153,15 +154,36 @@ public class TestRobot3
         return new Position(coordinates[0], coordinates[2]);
     }
 
-    private void MoveRobotToPosition(Position position,
-                                     double robotHeading){
-        
-        DifferentialDriveRequest dr = CalculateDrive(position, robotHeading);
+    private void MoveRobotToPosition(double robotHeading, int i){
 
-        try{
-            robotcomm.putRequest(dr);
-        } catch(Exception e){
-            System.out.println("Sending drive request failed.");
+        DifferentialDriveRequest dr;
+
+        while(robotPosition.getDistanceTo(path[i]) > linearMargin) {
+
+            dr = CalculateDrive(path[i+1], robotHeading);
+
+            try {
+                robotcomm.putRequest(dr);
+            } catch (Exception e) {
+                System.out.println("Sending drive request failed.");
+            }
+        }
+    }
+
+    private void MoveRobotToFinalPosition(double robotHeading){
+
+        DifferentialDriveRequest dr;
+
+        while(robotPosition.getDistanceTo(path[path.length - 1]) >
+                linearMargin) {
+
+            dr = CalculateDrive(path[path.length - 1], robotHeading);
+
+            try {
+                robotcomm.putRequest(dr);
+            } catch (Exception e) {
+                System.out.println("Sending drive request failed.");
+            }
         }
     }
 
