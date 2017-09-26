@@ -40,8 +40,8 @@
       <file leaf-file-name="TestRobot4.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TestRobot4.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="63" column="53" lean-forward="false" selection-start-line="63" selection-start-column="53" selection-end-line="63" selection-end-column="53" />
+            <state relative-caret-position="300">
+              <caret line="69" column="38" lean-forward="false" selection-start-line="69" selection-start-column="38" selection-end-line="69" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -180,6 +180,11 @@
             <path>
               <item name="AI-Robot-Basic-master" type="b2602c69:ProjectViewProjectNode" />
               <item name="AI-Robot-Basic-master" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="AI-Robot-Basic-master" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AI-Robot-Basic-master" type="462c0819:PsiDirectoryNode" />
+              <item name="input" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="AI-Robot-Basic-master" type="b2602c69:ProjectViewProjectNode" />
@@ -1161,13 +1166,6 @@
       <workItem from="1505292876069" duration="578000" />
       <workItem from="1505996135656" duration="153000" />
     </task>
-    <task id="LOCAL-00008" summary="lr">
-      <created>1505894181490</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1505894181490</updated>
-    </task>
     <task id="LOCAL-00009" summary="Robot is moving! Now trying to move right.">
       <created>1505895464597</created>
       <option name="number" value="00009" />
@@ -1504,11 +1502,18 @@
       <option name="project" value="LOCAL" />
       <updated>1506436345396</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="ROBOT 4 FTW!!!!!!!!!!!!!!!!!!!!!!!!!">
+      <created>1506456095773</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1506456095774</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="20033000" />
+    <option name="totallyTimeSpent" value="20460000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="0" width="2160" height="1440" extended-state="0" />
@@ -1600,7 +1605,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="changed heading return statement" />
     <MESSAGE value="stuff" />
     <MESSAGE value="Polled wrong" />
     <MESSAGE value="try reverse if position is behind you" />
@@ -1625,7 +1629,8 @@
     <MESSAGE value="added paths and increased lookaheaddistance" />
     <MESSAGE value="lookahead = *20" />
     <MESSAGE value="sharp angle = slow speed" />
-    <option name="LAST_COMMIT_MESSAGE" value="sharp angle = slow speed" />
+    <MESSAGE value="ROBOT 4 FTW!!!!!!!!!!!!!!!!!!!!!!!!!" />
+    <option name="LAST_COMMIT_MESSAGE" value="ROBOT 4 FTW!!!!!!!!!!!!!!!!!!!!!!!!!" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2000,8 +2005,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TestRobot4.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="63" column="53" lean-forward="false" selection-start-line="63" selection-start-column="53" selection-end-line="63" selection-end-column="53" />
+        <state relative-caret-position="300">
+          <caret line="69" column="38" lean-forward="false" selection-start-line="69" selection-start-column="38" selection-end-line="69" selection-end-column="38" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

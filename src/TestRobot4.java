@@ -61,13 +61,13 @@ public class TestRobot4 {
     private void run() throws Exception {
 
         robotcomm = new RobotCommunication(host, port);
-        pathQueue = SetRobotPath("./input/Path-to-bed.json");
+        pathQueue = SetRobotPath("./input/Path-around-table-and-back.json");
         LocalizationResponse lr = new LocalizationResponse();
         dr = new DifferentialDriveRequest(); // request
 
         Position goToPosition = pathQueue.peekFirst();
         Position robotPosition;
-        double lookAheadDistance = 1.5;
+        double lookAheadDistance = 1.2;
 
         do {
 
