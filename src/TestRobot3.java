@@ -117,7 +117,7 @@ public class TestRobot3
         distanceBetweenPoints /= path.length;
         angleBetweenPoints /= path.length;
 
-        this.linearMargin = distanceBetweenPoints;
+        this.linearMargin = distanceBetweenPoints/2;
         this.angularMargin = angleBetweenPoints/4;
 
         System.out.println("Path length: " + path.length);
