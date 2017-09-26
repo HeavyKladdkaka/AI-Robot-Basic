@@ -49,16 +49,13 @@ public class TestRobot3
         SetRobotMargins();
 
         for(int i = 1 ; i < path.length - 1 ; i++){
-
             MoveRobotToPosition(i);
-
             System.out.println("Steps left: " + (path.length - i));
-
         }
 
         HaltRobotMovement();
 
-        System.out.println("Robot is done. ");
+        System.out.println("Robot is done.");
 
     }
 
@@ -151,8 +148,7 @@ public class TestRobot3
 
         LocalizationResponse lr = new LocalizationResponse();
 
-        while(robotPosition.getDistanceTo(path[i]) > linearMargin) {
-
+        do {
             robotcomm.getResponse(lr);
             robotHeading = getHeadingAngle(lr);
             robotPosition = getPosition(lr);
@@ -165,7 +161,7 @@ public class TestRobot3
             } catch (Exception e) {
                 System.out.println("Sending drive request failed.");
             }
-        }
+        }while(robotPosition.getDistanceTo(path[i]) > linearMargin);
     }
 
     private DifferentialDriveRequest CalculateDrive(Position nextPosition,
