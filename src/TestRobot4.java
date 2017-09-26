@@ -1,8 +1,5 @@
 import java.io.*;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.JSONArray;
@@ -69,6 +66,8 @@ public class TestRobot4 {
         Position robotPosition;
         double lookAheadDistance = 1.2;
 
+        Date startTime = new Date();
+
         do {
 
             robotcomm.getResponse(lr); // ask the robot about its position and angle
@@ -93,16 +92,18 @@ public class TestRobot4 {
                 (robotPosition) > 0.1);
 
         setWheelSpeed(0, 0);
+        Date stopTime = new Date();
         System.out.println("Robot is within 1 meter from the last point in" +
-                " the path.");
+                " the path. Seconds passed: " + ((stopTime.getTime()
+                -startTime.getTime())/1000));
     }
 
-    private void setWheelSpeed(double angularSpeed,double linnearSpeed) {
+    private void setWheelSpeed(double angularSpeed,double linearSpeed) {
 
         DifferentialDriveRequest dr = new DifferentialDriveRequest();
 
         dr.setAngularSpeed(angularSpeed);
-        dr.setLinearSpeed(linnearSpeed);
+        dr.setLinearSpeed(linearSpeed);
 
         try {
             robotcomm.putRequest(dr);
