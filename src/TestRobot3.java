@@ -47,6 +47,7 @@ public class TestRobot3
         LocalizationResponse lr = new LocalizationResponse();
 
         path = SetRobotPath("./input/Path-around-table.json");
+        System.out.println("Steps left: " + path.length);
 
         setRobotMargins();
 
@@ -63,9 +64,7 @@ public class TestRobot3
 
             if(robotPosition.getDistanceTo(nextPosition) <= linearMargin){
                 pathQueue.pollLast();
-                System.out.println("Robot moved super good!");
-            } else {
-                System.out.println("Robot wont move good. ");
+                System.out.println("Steps left: " + path.length);
             }
         }
     }
@@ -167,7 +166,7 @@ public class TestRobot3
         try{
             robotcomm.putRequest(dr);
         } catch(Exception e){
-            System.out.println("Moving robot failed. ");
+            System.out.println("Sending drive request failed.");
         }
     }
 
@@ -182,7 +181,7 @@ public class TestRobot3
 
         angle = bearing - robotHeading;
 
-        if(Math.abs(angle)-this.angularMargin <= 0){
+        if(Math.abs(angle) <= this.angularMargin){
             angle = 0;
         }
 
