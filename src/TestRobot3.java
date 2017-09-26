@@ -63,7 +63,7 @@ public class TestRobot3
             MoveRobotToPosition(nextPosition, robotHeading);
 
             if(robotPosition.getDistanceTo(nextPosition) <= linearMargin){
-                pathQueue.pollLast();
+                pathQueue.pollFirst();
                 System.out.println("Steps left: " + path.length);
             }
         }
@@ -119,8 +119,8 @@ public class TestRobot3
         distanceBetweenPoints /= path.length;
         angleBetweenPoints /= path.length;
 
-        this.linearMargin = distanceBetweenPoints/4;
-        this.angularMargin = angleBetweenPoints/4;
+        this.linearMargin = distanceBetweenPoints/6;
+        this.angularMargin = angleBetweenPoints/6;
 
         System.out.println("Path length: " + path.length);
 
@@ -181,7 +181,7 @@ public class TestRobot3
 
         angle = bearing - robotHeading;
 
-        if(Math.abs(angle) <= this.angularMargin){
+        if(angle <= this.angularMargin){
             angle = 0;
         }
 
