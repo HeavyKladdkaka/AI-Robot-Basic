@@ -4,32 +4,32 @@ import java.util.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * TestRobot interfaces to the (real or virtual) robot over a network connection.
- * It uses Java -> JSON -> HttpRequest -> Network -> DssHost32 -> Lokarria(Robulab) -> Core -> MRDS4
+ * TestRobotinterfaces to the (real or virtual) robot over a network connection.
+ * It uses Java -> JSON -> HttpRequest -> Network -> DssHost32 ->
+ * Lokarria(Robulab) -> Core -> MRDS4
  *
- * @author thomasj
+ * @author Aron Nisbel, id15anl
+ * @author Jesper Blomqvist,
  */
 public class RummelTheRobustRobot {
-    private RobotCommunication robotcomm;  // communication drivers
-    private Position[] path;
-    private double[] position;
-    private double robotAngle;
-    private double newPositionAngle;
-    private DifferentialDriveRequest dr;
-    private double robotToPositionAngle;
-    private LaserEchoesResponse laser;
 
+    private RobotCommunication robotcomm;  // communication drivers
+    private double robotAngle;
+    private double nextPositionAngle;
     private String host;
     private int port;
     private LinkedList<Position> pathQueue;
 
     /**
-     * Create a robot connected to host "host" at port "port"
+     * Create a RummelRobot connected to host "host" at port "port" and
+     * initialize a LinkedList later to be used in run()-method and
+     * setRobotPath()-method.
      *
      * @param host normally http://127.0.0.1
      * @param port normally 50000
      */
     public RummelTheRobustRobot(String host, int port) {
+
         this.host = host;
         this.port = port;
         this.pathQueue = new LinkedList<>();
@@ -68,10 +68,10 @@ public class RummelTheRobustRobot {
      */
     private void run() throws Exception {
 
+        double[] position;
         robotcomm = new RobotCommunication(host, port);
         pathQueue = SetRobotPath("./input/Path-around-table-and-back.json");
         LocalizationResponse lr = new LocalizationResponse();
-        dr = new DifferentialDriveRequest(); // request
 
         Position goToPosition = pathQueue.peekFirst();
         Position robotPosition;
@@ -81,7 +81,7 @@ public class RummelTheRobustRobot {
 
         do {
 
-            robotcomm.getResponse(lr); // ask the robot about its position and angle
+            robotcomm.getResponse(lr);
             robotAngle = lr.getHeadingAngle();
             position = lr.getPosition();
 
@@ -95,7 +95,7 @@ public class RummelTheRobustRobot {
             } else if (robotPosition.getDistanceTo(goToPosition)
                     > lookAheadDistance) {
 
-                newPositionAngle = robotPosition.getBearingTo(goToPosition);
+                nextPositionAngle = robotPosition.getBearingTo(goToPosition);
                 moveRobot();
             }
 
@@ -104,6 +104,7 @@ public class RummelTheRobustRobot {
 
         setWheelSpeed(0, 0);
         Date stopTime = new Date();
+
         System.out.println("Robot is within 1 meter from the last point in" +
                 " the path. Seconds passed: " + ((stopTime.getTime()
                 -startTime.getTime())/1000));
@@ -141,9 +142,9 @@ public class RummelTheRobustRobot {
      */
     private void moveRobot() {
 
-        DifferentialDriveRequest dr = new DifferentialDriveRequest();
+        double robotToPositionAngle;
 
-        robotToPositionAngle = newPositionAngle - robotAngle;
+        robotToPositionAngle = nextPositionAngle - robotAngle;
 
         if (robotToPositionAngle > Math.PI) {
 
@@ -171,8 +172,12 @@ public class RummelTheRobustRobot {
      * file in order first to last.
      */
     private LinkedList SetRobotPath(String filename) {
+
+        Position[] path;
         File pathFile = new File(filename);
+
         try {
+
             BufferedReader in = new BufferedReader(new InputStreamReader
                     (new FileInputStream(pathFile)));
 
@@ -181,29 +186,44 @@ public class RummelTheRobustRobot {
             Collection<Map<String, Object>> data =
                     (Collection<Map<String, Object>>) mapper.readValue
                             (in, Collection.class);
+
             int nPoints = data.size();
             path = new Position[nPoints];
             int index = 0;
+
             for (Map<String, Object> point : data) {
+
                 Map<String, Object> pose =
                         (Map<String, Object>) point.get("Pose");
                 Map<String, Object> aPosition =
                         (Map<String, Object>) pose.get("Position");
+
                 double x = (Double) aPosition.get("X");
                 double y = (Double) aPosition.get("Y");
+
                 path[index] = new Position(x, y);
                 pathQueue.add(new Position(x, y));
+
                 index++;
             }
+
             System.out.println("Found path. First position is: ");
             System.out.println(path[0].getX() + ":" + path[0].getY());
+
             return pathQueue;
+
         } catch (FileNotFoundException e) {
+
             System.out.println("File not found. ");
+
         } catch (IOException e) {
+
             System.out.println("IOException. ");
+
         }
+
         System.out.println("Null path");
+
         return null;
     }
 }
