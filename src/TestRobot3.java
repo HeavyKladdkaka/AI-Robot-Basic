@@ -182,11 +182,11 @@ public class TestRobot3
 
         angle = bearing - robotHeading;
 
-        //if(Math.abs(robotHeading) > Math.abs(bearing)-this.angularMargin){
-        //    angle = bearing - robotHeading;
-        //}
+        if(Math.abs(angle)-this.angularMargin <= 0){
+            angle = 0;
+        }
 
-        speed = 0.3;
+        speed = 0.1;
 
         /*
         if(angle > 1.5){
