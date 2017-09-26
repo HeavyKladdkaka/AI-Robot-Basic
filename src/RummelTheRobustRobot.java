@@ -2,9 +2,6 @@ import java.io.*;
 import java.util.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 /**
  * TestRobot interfaces to the (real or virtual) robot over a network connection.
@@ -12,7 +9,7 @@ import org.json.simple.parser.JSONParser;
  *
  * @author thomasj
  */
-public class TestRobot4 {
+public class RummelTheRobustRobot {
     private RobotCommunication robotcomm;  // communication drivers
     private Position[] path;
     private double[] position;
@@ -32,7 +29,7 @@ public class TestRobot4 {
      * @param host normally http://127.0.0.1
      * @param port normally 50000
      */
-    public TestRobot4(String host, int port) {
+    public RummelTheRobustRobot(String host, int port) {
         this.host = host;
         this.port = port;
         this.pathQueue = new LinkedList<>();
@@ -47,7 +44,7 @@ public class TestRobot4 {
      */
     public static void main(String[] args) throws Exception {
         System.out.println("Creating Robot4");
-        TestRobot4 robot = new TestRobot4("http://127.0.0.1", 50000);
+        RummelTheRobustRobot robot = new RummelTheRobustRobot("http://127.0.0.1", 50000);
         robot.run();
     }
 
