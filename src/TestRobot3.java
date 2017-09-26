@@ -44,18 +44,13 @@ public class TestRobot3
     {
         robotcomm = new RobotCommunication(host, port);
 
-        LocalizationResponse lr = new LocalizationResponse();
-
         path = SetRobotPath("./input/Path-around-table.json");
 
         SetRobotMargins();
 
         for(int i = 1 ; i < path.length - 1 ; i++){
-            robotcomm.getResponse(lr);
-            robotHeading = getHeadingAngle(lr);
-            robotPosition = getPosition(lr);
 
-            MoveRobotToPosition(robotHeading, i, lr);
+            MoveRobotToPosition(i);
 
             System.out.println("Steps left: " + (path.length - i));
 
@@ -152,8 +147,9 @@ public class TestRobot3
         return new Position(coordinates[0], coordinates[2]);
     }
 
-    private void MoveRobotToPosition(double robotHeading, int i,
-                                     LocalizationResponse lr) throws Exception{
+    private void MoveRobotToPosition(int i) throws Exception{
+
+        LocalizationResponse lr = new LocalizationResponse();
 
         while(robotPosition.getDistanceTo(path[i]) > linearMargin) {
 
