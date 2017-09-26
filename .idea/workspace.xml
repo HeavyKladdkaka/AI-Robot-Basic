@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="efcebfbf-8ab9-4da0-a969-75578eb6663f" name="Default" comment="">
+    <list default="true" id="efcebfbf-8ab9-4da0-a969-75578eb6663f" name="Default" comment="try reverse if position is behind you">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/TestRobot3.java" afterPath="$PROJECT_DIR$/src/TestRobot3.java" />
     </list>
@@ -18,11 +18,21 @@
       <file leaf-file-name="TestRobot3.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TestRobot3.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="355">
-              <caret line="191" column="9" lean-forward="true" selection-start-line="191" selection-start-column="9" selection-end-line="191" selection-end-column="9" />
+            <state relative-caret-position="220">
+              <caret line="190" column="65" lean-forward="false" selection-start-line="190" selection-start-column="65" selection-end-line="190" selection-end-column="65" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Path-around-table.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/input/Path-around-table.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-11077">
+              <caret line="0" column="308" lean-forward="false" selection-start-line="0" selection-start-column="308" selection-end-line="0" selection-end-column="308" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -91,6 +101,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>get</find>
+      <find>pathqueue</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -588,7 +599,21 @@
       <option name="project" value="LOCAL" />
       <updated>1506420008214</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="try reverse if position is behind you">
+      <created>1506420340932</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1506420340932</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Changed from pathQueue to array">
+      <created>1506421265178</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1506421265178</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -682,7 +707,9 @@
     <MESSAGE value="changed heading return statement" />
     <MESSAGE value="stuff" />
     <MESSAGE value="Polled wrong" />
-    <option name="LAST_COMMIT_MESSAGE" value="Polled wrong" />
+    <MESSAGE value="try reverse if position is behind you" />
+    <MESSAGE value="Changed from pathQueue to array" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed from pathQueue to array" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -996,13 +1023,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/input/Path-around-table.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="440" lean-forward="false" selection-start-line="0" selection-start-column="431" selection-end-line="0" selection-end-column="440" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/TestRobot.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="413">
@@ -1057,10 +1077,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/input/Path-around-table.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-11077">
+          <caret line="0" column="308" lean-forward="false" selection-start-line="0" selection-start-column="308" selection-end-line="0" selection-end-column="308" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/TestRobot3.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="191" column="9" lean-forward="true" selection-start-line="191" selection-start-column="9" selection-end-line="191" selection-end-column="9" />
+        <state relative-caret-position="220">
+          <caret line="190" column="65" lean-forward="false" selection-start-line="190" selection-start-column="65" selection-end-line="190" selection-end-column="65" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
