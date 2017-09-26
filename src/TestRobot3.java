@@ -42,34 +42,28 @@ public class TestRobot3
 
     public void run() throws Exception
     {
-        int stepsDone = 1;
         robotcomm = new RobotCommunication(host, port);
+        Position nextPosition;
 
         LocalizationResponse lr = new LocalizationResponse();
 
         path = SetRobotPath("./input/Path-around-table.json");
-        System.out.println("Steps left: " + (path.length - stepsDone));
 
         setRobotMargins();
 
-        Position nextPosition = path[(path.length - 1) - stepsDone];
-
-        while(stepsDone < path.length){
+        for(int i = 0 ; i < path.length ; i++){
             robotcomm.getResponse(lr);
             robotHeading = getHeadingAngle(lr);
             robotPosition = getPosition(lr);
 
-            MoveRobotToPosition(path[(path.length - 1) - (stepsDone + 1)],
-                    robotHeading);
-
-            if(robotPosition.getDistanceTo(nextPosition) <= linearMargin){
-                stepsDone++;
-                nextPosition = path[(path.length - 1) - stepsDone];
-                System.out.println("Steps left: " + (path.length - stepsDone));
+            while(robotPosition.getDistanceTo(path[i]) > linearMargin){
+                MoveRobotToPosition(path[i+1], robotHeading);
             }
+
+            System.out.println("Steps left: " + (path.length - i));
+
         }
         HaltRobotMovement();
-        System.out.println("Steps left: " + (path.length - stepsDone));
         System.out.println("Robot is done. ");
 
     }
@@ -124,7 +118,7 @@ public class TestRobot3
         distanceBetweenPoints /= path.length;
         angleBetweenPoints /= path.length;
 
-        this.linearMargin = distanceBetweenPoints/4;
+        this.linearMargin = distanceBetweenPoints;
         this.angularMargin = angleBetweenPoints/4;
 
         System.out.println("Path length: " + path.length);
