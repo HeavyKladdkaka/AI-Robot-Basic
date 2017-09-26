@@ -13,10 +13,10 @@ public class RummelTheRobustRobot {
     private RobotCommunication robotcomm;  // communication drivers
     private Position[] path;
     private double[] position;
-    private double angle;
+    private double robotAngle;
     private double newPositionAngle;
     private DifferentialDriveRequest dr;
-    private double newSpeedAngle;
+    private double robotToPositionAngle;
     private LaserEchoesResponse laser;
 
     private String host;
@@ -36,21 +36,35 @@ public class RummelTheRobustRobot {
     }
 
     /**
-     * This simple main program creates a robot, sets up some speed and turning rate and
-     * then displays angle and position for 16 seconds.
-     *
+     * This simple main program creates a RummelRobot, the fastest robot-type
+     * there is. Then it calls the run-method.
      * @param args not used
      * @throws Exception not caught
      */
     public static void main(String[] args) throws Exception {
-        System.out.println("Creating Robot4");
+
+        System.out.println("Creating RummelRobot");
         RummelTheRobustRobot robot = new RummelTheRobustRobot("http://127.0.0.1", 50000);
         robot.run();
     }
 
     /**
+     *  This run-method creates the communication with the server and reads
+     *  from a path file which will be the path for the RummelRobot to follow.
+     *  It creates the necessary positions, sets a start time, a
+     *  lookAheadDistance and start a do-while-loop.
      *
-     * @throws Exception
+     *  The loop gets the RummelRobot's angle and the angle to the next
+     *  position in the path from a queue. It then compares the distance from
+     *  the RummelRobot to the next position and checks with the hardcoded
+     *  lookAheadDistance and sees if it's more or less. If it's less than
+     *  the lookAheadDistance then it loops and does the same thing until it
+     *  finds a position that is further away than the lookAheadDistance.
+     *
+     *  Then it moves towards that position by using moveRobot() and keeps
+     *  searching for positions further away than the lookAheadDistance and
+     *  keeps updating the directions.
+     * @throws Exception DifferentialDriveRequest-Exception
      */
     private void run() throws Exception {
 
@@ -68,7 +82,7 @@ public class RummelTheRobustRobot {
         do {
 
             robotcomm.getResponse(lr); // ask the robot about its position and angle
-            angle = lr.getHeadingAngle();
+            robotAngle = lr.getHeadingAngle();
             position = lr.getPosition();
 
             robotPosition = new Position(position);
@@ -95,6 +109,12 @@ public class RummelTheRobustRobot {
                 -startTime.getTime())/1000));
     }
 
+    /**
+     * Sets the wheel speed of the RummelRobot and makes a request to the
+     * server.
+     * @param angularSpeed the turning speed of the RummelRobot.
+     * @param linearSpeed the speed straight forward of the RummelRobot.
+     */
     private void setWheelSpeed(double angularSpeed,double linearSpeed) {
 
         DifferentialDriveRequest dr = new DifferentialDriveRequest();
@@ -109,49 +129,48 @@ public class RummelTheRobustRobot {
         }
     }
 
+    /**
+     * Measures the angle between the robot and the position and moves
+     * accordingly by setting the angularspeed and linearspeed. Using the
+     * method setWheelSpeed() it calculates the radians with 2 times pi to
+     * account for the times that the angle might be small to the left/right of
+     * the robot but the robot wants to turn the other way and then makes sure
+     * that doesn't happen. All the hardcoded values here can be optimized
+     * for each specific path. Especially the linearspeed in the last
+     * else-statement.
+     */
     private void moveRobot() {
 
         DifferentialDriveRequest dr = new DifferentialDriveRequest();
-        newSpeedAngle = newPositionAngle - angle;
-        if (newSpeedAngle > Math.PI) {
-            setWheelSpeed(newSpeedAngle - Math.PI * 2,1);
-        } else if (newSpeedAngle < -Math.PI) {
-            setWheelSpeed(newSpeedAngle + Math.PI * 2,1);
-        } else if (newSpeedAngle == 0) {
-            setWheelSpeed(0,0.5);
+
+        robotToPositionAngle = newPositionAngle - robotAngle;
+
+        if (robotToPositionAngle > Math.PI) {
+
+            setWheelSpeed(robotToPositionAngle - Math.PI * 2, 1);
+
+        } else if (robotToPositionAngle < -Math.PI) {
+
+            setWheelSpeed(robotToPositionAngle + Math.PI * 2,1);
+
+        } else if (robotToPositionAngle == 0) {
+
+            setWheelSpeed(0,1);
+
         } else {
-            setWheelSpeed(newSpeedAngle,0.5);
-        }
-        /*if((newPositionAngle < Math.PI/4) && (newPositionAngle > (-Math.PI)
-                /4)){
-            if(newSpeedAngle > Math.PI){
-                newSpeedAngle -= 2*Math.PI;
-            }
-            if(newSpeedAngle < (-Math.PI)){
-                newSpeedAngle += 2*Math.PI;
-            }
-            dr.setAngularSpeed(newSpeedAngle/2);
-            dr.setLinearSpeed(1);
-        }
-        else if(newPositionAngle - angle < 0){
 
-            dr.setAngularSpeed(-0.2);
-            dr.setLinearSpeed(0.1);
+            setWheelSpeed(robotToPositionAngle,0.5);
         }
-        else if(newPositionAngle - angle > 0){
-
-            dr.setAngularSpeed(0.2);
-            dr.setLinearSpeed(0.1);
-        }
-
-        try {
-            robotcomm.putRequest(dr);
-        }catch(Exception e){
-            e.printStackTrace();
-       }*/
     }
 
-    LinkedList SetRobotPath(String filename) {
+    /**
+     * This method extracts each position in the given path file and puts
+     * them in a linkedlist ordered like a queue.
+     * @param filename the path file.
+     * @return a linkedlist as a queue with all the positions of the path
+     * file in order first to last.
+     */
+    private LinkedList SetRobotPath(String filename) {
         File pathFile = new File(filename);
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader
@@ -159,7 +178,6 @@ public class RummelTheRobustRobot {
 
             ObjectMapper mapper = new ObjectMapper();
 
-            // read the path from the file
             Collection<Map<String, Object>> data =
                     (Collection<Map<String, Object>>) mapper.readValue
                             (in, Collection.class);
