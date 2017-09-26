@@ -8,14 +8,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
 /**
  * TestRobot interfaces to the (real or virtual) robot over a network connection.
  * It uses Java -> JSON -> HttpRequest -> Network -> DssHost32 -> Lokarria(Robulab) -> Core -> MRDS4
  *
  * @author thomasj
  */
-public class TestRobot4
-{
+public class TestRobot4 {
     private RobotCommunication robotcomm;  // communication drivers
     private Position[] path;
     private double[] position;
@@ -23,17 +23,19 @@ public class TestRobot4
     private double newPositionAngle;
     private DifferentialDriveRequest dr;
     private double newSpeedAngle;
+    private LaserEchoesResponse laser;
 
     private String host;
     private int port;
     private LinkedList<Position> pathQueue;
+
     /**
      * Create a robot connected to host "host" at port "port"
+     *
      * @param host normally http://127.0.0.1
      * @param port normally 50000
      */
-    public TestRobot4(String host, int port)
-    {
+    public TestRobot4(String host, int port) {
         this.host = host;
         this.port = port;
         this.pathQueue = new LinkedList<>();
@@ -42,103 +44,118 @@ public class TestRobot4
     /**
      * This simple main program creates a robot, sets up some speed and turning rate and
      * then displays angle and position for 16 seconds.
-     * @param args         not used
-     * @throws Exception   not caught
+     *
+     * @param args not used
+     * @throws Exception not caught
      */
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         System.out.println("Creating Robot4");
         TestRobot4 robot = new TestRobot4("http://127.0.0.1", 50000);
         robot.run();
     }
 
+    /**
+     *
+     * @throws Exception
+     */
+    private void run() throws Exception {
 
-    private void run() throws Exception
-    {
         robotcomm = new RobotCommunication(host, port);
-        Position robotPosition;
-        double lookAheadDistance = 0.55;
-        RobotCommunication robotcomm = new RobotCommunication(host, port);
-        pathQueue = SetRobotPath("./input/Path-around-table.json");
-        LocalizationResponse lr = new LocalizationResponse(); // response
-        boolean goToPositionSet = false;
-        Position goToPosition = pathQueue.peekFirst();
+        pathQueue = SetRobotPath("./input/Path-to-bed.json");
+        LocalizationResponse lr = new LocalizationResponse();
+        dr = new DifferentialDriveRequest(); // request
 
-        do
-        {
-            dr = new DifferentialDriveRequest(); // request
+        Position goToPosition = pathQueue.peekFirst();
+        Position robotPosition;
+        double lookAheadDistance = 1.5;
+
+        do {
+
             robotcomm.getResponse(lr); // ask the robot about its position and angle
-            angle = getHeadingAngle(lr);
-            System.out.println("heading = " + angle);
-            position = getPosition(lr);
-            System.out.println("position = " + position[0] + ", " +
-                    position[1]);
+            angle = lr.getHeadingAngle();
+            position = lr.getPosition();
 
             robotPosition = new Position(position);
-            System.out.println("Last position in path: " + pathQueue.peekLast
-                    ().getX() + ", " + pathQueue.peekLast().getY());
 
-            System.out.println("Distans till position är: " + robotPosition
-                    .getDistanceTo(pathQueue.peekFirst()));
-
-            if(robotPosition.getDistanceTo(goToPosition) <
-                    lookAheadDistance){
+            if (robotPosition.getDistanceTo(goToPosition) <
+                    lookAheadDistance) {
 
                 goToPosition = pathQueue.poll();
-            }
-            else if (robotPosition.getDistanceTo(goToPosition)
-                    > lookAheadDistance && !goToPositionSet){
 
-                goToPositionSet = true;
-            }
-            else if (goToPositionSet){
+            } else if (robotPosition.getDistanceTo(goToPosition)
+                    > lookAheadDistance) {
 
                 newPositionAngle = robotPosition.getBearingTo(goToPosition);
                 moveRobot();
-                goToPositionSet = false;
             }
 
-        }while(pathQueue.peekLast().getDistanceTo(robotPosition) > 1);
-        // set up request to stop the robot
-        dr.setLinearSpeed(0);
-        dr.setAngularSpeed(0);
+        } while (!pathQueue.isEmpty() && pathQueue.peekLast().getDistanceTo
+                (robotPosition) > 0.1);
+
+        setWheelSpeed(0, 0);
         System.out.println("Robot is within 1 meter from the last point in" +
                 " the path.");
     }
 
-    private void moveRobot(){
+    private void setWheelSpeed(double angularSpeed,double linnearSpeed) {
 
         DifferentialDriveRequest dr = new DifferentialDriveRequest();
 
-        newSpeedAngle = newPositionAngle - angle;
+        dr.setAngularSpeed(angularSpeed);
+        dr.setLinearSpeed(linnearSpeed);
 
-        if(newSpeedAngle > Math.PI){
-            newSpeedAngle -= 2*Math.PI;
+        try {
+            robotcomm.putRequest(dr);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if(newSpeedAngle < (-Math.PI)){
-            newSpeedAngle += 2*Math.PI;
+    }
+
+    private void moveRobot() {
+
+        DifferentialDriveRequest dr = new DifferentialDriveRequest();
+        newSpeedAngle = newPositionAngle - angle;
+        if (newSpeedAngle > Math.PI) {
+            setWheelSpeed(newSpeedAngle - Math.PI * 2,1);
+        } else if (newSpeedAngle < -Math.PI) {
+            setWheelSpeed(newSpeedAngle + Math.PI * 2,1);
+        } else if (newSpeedAngle == 0) {
+            setWheelSpeed(0,0.5);
+        } else {
+            setWheelSpeed(newSpeedAngle,0.5);
         }
-        dr.setAngularSpeed(newSpeedAngle);
-        if(newSpeedAngle <= 0) {
-            dr.setLinearSpeed(1.5 + newSpeedAngle);
+        /*if((newPositionAngle < Math.PI/4) && (newPositionAngle > (-Math.PI)
+                /4)){
+            if(newSpeedAngle > Math.PI){
+                newSpeedAngle -= 2*Math.PI;
+            }
+            if(newSpeedAngle < (-Math.PI)){
+                newSpeedAngle += 2*Math.PI;
+            }
+            dr.setAngularSpeed(newSpeedAngle/2);
+            dr.setLinearSpeed(1);
         }
-        else if(newSpeedAngle > 0) {
-            dr.setLinearSpeed(1.5 - newSpeedAngle);
+        else if(newPositionAngle - angle < 0){
+
+            dr.setAngularSpeed(-0.2);
+            dr.setLinearSpeed(0.1);
         }
-        else{
-            dr.setLinearSpeed(0.4);
+        else if(newPositionAngle - angle > 0){
+
+            dr.setAngularSpeed(0.2);
+            dr.setLinearSpeed(0.1);
         }
 
         try {
             robotcomm.putRequest(dr);
         }catch(Exception e){
             e.printStackTrace();
-        }
+       }*/
     }
 
-    LinkedList SetRobotPath(String filename){
+    LinkedList SetRobotPath(String filename) {
         File pathFile = new File(filename);
-        try{
+        try {
             BufferedReader in = new BufferedReader(new InputStreamReader
                     (new FileInputStream(pathFile)));
 
@@ -151,14 +168,13 @@ public class TestRobot4
             int nPoints = data.size();
             path = new Position[nPoints];
             int index = 0;
-            for (Map<String, Object> point : data)
-            {
+            for (Map<String, Object> point : data) {
                 Map<String, Object> pose =
-                        (Map<String, Object>)point.get("Pose");
+                        (Map<String, Object>) point.get("Pose");
                 Map<String, Object> aPosition =
-                        (Map<String, Object>)pose.get("Position");
-                double x = (Double)aPosition.get("X");
-                double y = (Double)aPosition.get("Y");
+                        (Map<String, Object>) pose.get("Position");
+                double x = (Double) aPosition.get("X");
+                double y = (Double) aPosition.get("Y");
                 path[index] = new Position(x, y);
                 pathQueue.add(new Position(x, y));
                 index++;
@@ -166,38 +182,13 @@ public class TestRobot4
             System.out.println("Found path. First position is: ");
             System.out.println(path[0].getX() + ":" + path[0].getY());
             return pathQueue;
-        } catch(FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             System.out.println("File not found. ");
-        } catch(IOException e){
+        } catch (IOException e) {
             System.out.println("IOException. ");
         }
         System.out.println("Null path");
         return null;
     }
-
-    /**
-     * Extract the robot heading from the response
-     * @param lr
-     * @return angle in degrees
-     */
-    double getHeadingAngle(LocalizationResponse lr)
-    {
-        double e[] = lr.getOrientation();
-
-        double angle = Math.atan2(e[3], e[0]);
-        return angle;
-    }
-
-    /**
-     * Extract the position
-     * @param lr
-     * @return coordinates
-     */
-    double[] getPosition(LocalizationResponse lr)
-    {
-        return lr.getPosition();
-    }
-
-
 }
 
