@@ -18,8 +18,8 @@
       <file leaf-file-name="TestRobot3.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TestRobot3.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="261">
-              <caret line="119" column="51" lean-forward="false" selection-start-line="119" selection-start-column="51" selection-end-line="119" selection-end-column="51" />
+            <state relative-caret-position="166">
+              <caret line="161" column="44" lean-forward="true" selection-start-line="161" selection-start-column="44" selection-end-line="161" selection-end-column="44" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -805,7 +805,14 @@
       <option name="project" value="LOCAL" />
       <updated>1506431319912</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="shit">
+      <created>1506431353854</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1506431353854</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -1283,8 +1290,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TestRobot3.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="119" column="51" lean-forward="false" selection-start-line="119" selection-start-column="51" selection-end-line="119" selection-end-column="51" />
+        <state relative-caret-position="166">
+          <caret line="161" column="44" lean-forward="true" selection-start-line="161" selection-start-column="44" selection-end-line="161" selection-end-column="44" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

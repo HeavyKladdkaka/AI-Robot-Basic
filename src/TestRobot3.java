@@ -55,7 +55,7 @@ public class TestRobot3
             robotHeading = getHeadingAngle(lr);
             robotPosition = getPosition(lr);
 
-            MoveRobotToPosition(robotHeading, i);
+            MoveRobotToPosition(robotHeading, i, lr);
 
             System.out.println("Steps left: " + (path.length - i));
 
@@ -152,9 +152,14 @@ public class TestRobot3
         return new Position(coordinates[0], coordinates[2]);
     }
 
-    private void MoveRobotToPosition(double robotHeading, int i){
+    private void MoveRobotToPosition(double robotHeading, int i,
+                                     LocalizationResponse lr) throws Exception{
 
         while(robotPosition.getDistanceTo(path[i]) > linearMargin) {
+
+            robotcomm.getResponse(lr);
+            robotHeading = getHeadingAngle(lr);
+            robotPosition = getPosition(lr);
 
             DifferentialDriveRequest dr = CalculateDrive(path[i+1],
                     robotHeading);
