@@ -5,13 +5,13 @@ import java.util.*;
 
 public class TestRobot3
 {
-    private double robotHeading, linearMargin, angularMargin;
+    private double linearMargin, angularMargin;
     private int port;
     private String host;
     private RobotCommunication robotcomm;
     private Position[] path;
+    Position robotPosition;
     private LinkedList<Position> pathQueue;
-    private Position robotPosition;
 
     /**
      * Create a robot connected to host "host" at port "port"
@@ -48,12 +48,12 @@ public class TestRobot3
 
         SetRobotMargins();
 
-        for(int i = 0 ; i < path.length - 1 ; i++){
+        for(int i = 0 ; i <= path.length ; i++){
             MoveRobotToPosition(i);
             System.out.println("Steps left: " + (path.length - i));
         }
 
-        HaltRobotMovement();
+        SendDriveRequest(0,0);
 
         System.out.println("Robot is done.");
 
@@ -101,7 +101,7 @@ public class TestRobot3
     private void SetRobotMargins(){
         double distanceBetweenPoints = 0;
         double angleBetweenPoints = 0;
-        for(int i = 0 ; i < path.length - 1 ; i++){
+        for(int i = 0 ; i <= path.length ; i++){
             distanceBetweenPoints += path[i].getDistanceTo(path[i+1]);
             angleBetweenPoints += Math.abs(path[i].getBearingTo(path[i+1]));
         }
@@ -150,22 +150,14 @@ public class TestRobot3
 
         do {
             robotcomm.getResponse(lr);
-            robotHeading = getHeadingAngle(lr);
             robotPosition = getPosition(lr);
+            MoveRobot(path[i+1], getHeadingAngle(lr));
 
-            DifferentialDriveRequest dr = CalculateDrive(path[i+1],
-                    robotHeading);
-
-            try {
-                robotcomm.putRequest(dr);
-            } catch (Exception e) {
-                System.out.println("Sending drive request failed.");
-            }
-        }while(robotPosition.getDistanceTo(path[i]) > linearMargin);
+            robotcomm.getResponse(lr);
+        }while(getPosition(lr).getDistanceTo(path[i]) > linearMargin);
     }
 
-    private DifferentialDriveRequest CalculateDrive(Position nextPosition,
-                                                    double robotHeading){
+    private void MoveRobot(Position nextPosition, double robotHeading){
 
         double bearing = robotPosition.getBearingTo(nextPosition);
 
@@ -177,23 +169,17 @@ public class TestRobot3
 
         if(angle > Math.PI){
             angle -= 2 * Math.PI;
-        } else if (angle < Math.PI){
+        } else if (angle < -Math.PI){
             angle += 2 * Math.PI;
         }
 
-        DifferentialDriveRequest dr = new DifferentialDriveRequest();
-
-        dr.setLinearSpeed(speed);
-        dr.setAngularSpeed(angle);
-
-        return dr;
+        SendDriveRequest(speed, angle);
     }
 
-    private void HaltRobotMovement(){
-
+    private void SendDriveRequest(double linearSpeed, double angularSpeed){
         DifferentialDriveRequest dr = new DifferentialDriveRequest();
-        dr.setLinearSpeed(0);
-        dr.setAngularSpeed(0);
+        dr.setLinearSpeed(linearSpeed);
+        dr.setAngularSpeed(angularSpeed);
 
         try{
             robotcomm.putRequest(dr);

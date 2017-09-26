@@ -18,8 +18,8 @@
       <file leaf-file-name="TestRobot3.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TestRobot3.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="251">
-              <caret line="50" column="21" lean-forward="false" selection-start-line="50" selection-start-column="21" selection-end-line="50" selection-end-column="21" />
+            <state relative-caret-position="288">
+              <caret line="168" column="0" lean-forward="true" selection-start-line="168" selection-start-column="0" selection-end-line="168" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#SetRobotPath#0;class#TestRobot3#0" expanded="false" />
@@ -834,7 +834,14 @@
       <option name="project" value="LOCAL" />
       <updated>1506432457491</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="changed for int = 1 to i = 0">
+      <created>1506432562085</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1506432562086</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -909,7 +916,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Incremental turning" />
     <MESSAGE value="Prints bearing" />
     <MESSAGE value="Smart speed" />
     <MESSAGE value="Radians turnign" />
@@ -934,7 +940,8 @@
     <MESSAGE value="shit" />
     <MESSAGE value="moved lr and robotcomms to MoveRobot" />
     <MESSAGE value="changed while to do-while" />
-    <option name="LAST_COMMIT_MESSAGE" value="changed while to do-while" />
+    <MESSAGE value="changed for int = 1 to i = 0" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed for int = 1 to i = 0" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1313,8 +1320,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TestRobot3.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="251">
-          <caret line="50" column="21" lean-forward="false" selection-start-line="50" selection-start-column="21" selection-end-line="50" selection-end-column="21" />
+        <state relative-caret-position="288">
+          <caret line="168" column="0" lean-forward="true" selection-start-line="168" selection-start-column="0" selection-end-line="168" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#SetRobotPath#0;class#TestRobot3#0" expanded="false" />
