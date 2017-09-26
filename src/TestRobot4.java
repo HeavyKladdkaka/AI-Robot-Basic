@@ -134,12 +134,12 @@ public class TestRobot4
             dr.setLinearSpeed(0.4);
         }
         else if((angle - newPositionAngle) < 0){
-            dr.setLinearSpeed(0.2);
-            dr.setAngularSpeed(0.2);
+            //dr.setLinearSpeed(0);
+            dr.setAngularSpeed(0.5);
         }
         else if((angle - newPositionAngle) > 0){
-            dr.setLinearSpeed(0.2);
-            dr.setAngularSpeed(-0.2);
+            //dr.setLinearSpeed(0);
+            dr.setAngularSpeed(-0.5);
         }
         try {
             robotcomm.putRequest(dr);
