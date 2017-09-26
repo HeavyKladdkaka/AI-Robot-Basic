@@ -42,7 +42,7 @@ public class TestRobot3
 
     public void run() throws Exception
     {
-        int stepsDone = 1;
+        int stepsDone = 0;
         robotcomm = new RobotCommunication(host, port);
 
         LocalizationResponse lr = new LocalizationResponse();
