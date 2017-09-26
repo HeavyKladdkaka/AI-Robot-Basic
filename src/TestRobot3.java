@@ -50,7 +50,7 @@ public class TestRobot3
 
         SetRobotMargins();
 
-        for(int i = 0 ; i < path.length - 1 ; i++){
+        for(int i = 1 ; i < path.length - 1 ; i++){
             robotcomm.getResponse(lr);
             robotHeading = getHeadingAngle(lr);
             robotPosition = getPosition(lr);
@@ -60,8 +60,6 @@ public class TestRobot3
             System.out.println("Steps left: " + (path.length - i));
 
         }
-
-        //MoveRobotToFinalPosition(robotHeading);
 
         HaltRobotMovement();
 
@@ -156,28 +154,10 @@ public class TestRobot3
 
     private void MoveRobotToPosition(double robotHeading, int i){
 
-        DifferentialDriveRequest dr;
-
         while(robotPosition.getDistanceTo(path[i]) > linearMargin) {
 
-            dr = CalculateDrive(path[i+1], robotHeading);
-
-            try {
-                robotcomm.putRequest(dr);
-            } catch (Exception e) {
-                System.out.println("Sending drive request failed.");
-            }
-        }
-    }
-
-    private void MoveRobotToFinalPosition(double robotHeading){
-
-        DifferentialDriveRequest dr;
-
-        while(robotPosition.getDistanceTo(path[path.length - 1]) >
-                linearMargin) {
-
-            dr = CalculateDrive(path[path.length - 1], robotHeading);
+            DifferentialDriveRequest dr = CalculateDrive(path[i+1],
+                    robotHeading);
 
             try {
                 robotcomm.putRequest(dr);
@@ -203,18 +183,6 @@ public class TestRobot3
         } else if (angle < Math.PI){
             angle += 2 * Math.PI;
         }
-
-        /*
-        if(Math.abs(angle) <= this.angularMargin){
-            angle = 0;
-            speed = 0.3;
-        } else if(Math.abs(angle) < Math.PI  + this.angularMargin/2 &&
-                Math.abs(angle) > Math.PI  - this.angularMargin/2){
-
-            angle = 0;
-            speed = -0.3;
-        }
-        */
 
         DifferentialDriveRequest dr = new DifferentialDriveRequest();
 
