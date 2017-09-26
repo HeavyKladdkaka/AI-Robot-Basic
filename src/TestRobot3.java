@@ -204,6 +204,7 @@ public class TestRobot3
             angle += 2 * Math.PI;
         }
 
+        /*
         if(Math.abs(angle) <= this.angularMargin){
             angle = 0;
             speed = 0.3;
@@ -213,6 +214,7 @@ public class TestRobot3
             angle = 0;
             speed = -0.3;
         }
+        */
 
         DifferentialDriveRequest dr = new DifferentialDriveRequest();
 
@@ -234,6 +236,5 @@ public class TestRobot3
             System.out.println("Sending halt drive request failed.");
         }
     }
-
 }
 
