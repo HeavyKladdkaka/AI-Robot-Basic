@@ -180,12 +180,17 @@ public class TestRobot3
         double speed;
 
         angle = bearing - robotHeading;
+        speed = 0.1;
 
         if(Math.abs(angle) <= this.angularMargin){
             angle = 0;
+            speed = 0.5;
+        } else if(Math.abs(angle) <= Math.PI  + this.angularMargin ||
+                Math.abs(angle) <= Math.PI  - this.angularMargin){
+            angle = 0;
+            speed = -0.1;
         }
 
-        speed = 0.1;
 
         /*
         if(angle > 1.5){
