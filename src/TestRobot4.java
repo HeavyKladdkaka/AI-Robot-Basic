@@ -22,10 +22,11 @@ public class TestRobot4
     private double angle;
     private double newPositionAngle;
     private DifferentialDriveRequest dr;
+    private double newSpeedAngle;
 
     private String host;
     private int port;
-    private LinkedList pathQueue;
+    private LinkedList<Position> pathQueue;
     /**
      * Create a robot connected to host "host" at port "port"
      * @param host normally http://127.0.0.1
@@ -56,12 +57,12 @@ public class TestRobot4
     {
         robotcomm = new RobotCommunication(host, port);
         Position robotPosition;
-        double distance = 0.15;
+        double distance = 0.7;
         RobotCommunication robotcomm = new RobotCommunication(host, port);
         pathQueue = SetRobotPath("./input/Path-around-table.json");
         LocalizationResponse lr = new LocalizationResponse(); // response
         boolean goToPositionSet = false;
-        Position goToPosition = (Position)pathQueue.poll();
+        Position goToPosition = pathQueue.peekFirst();
 
         do
         {
@@ -76,12 +77,12 @@ public class TestRobot4
             robotPosition = new Position(position);
 
             System.out.println("Distans till position är: " + robotPosition
-                    .getDistanceTo((Position)pathQueue.peek()));
+                    .getDistanceTo(pathQueue.peekFirst()));
 
-            if((robotPosition.getDistanceTo(goToPosition) <
-                    distance)){
+            if(robotPosition.getDistanceTo(goToPosition) <
+                    distance){
 
-                goToPosition = (Position) pathQueue.poll();
+                goToPosition = pathQueue.poll();
             }
             else if (robotPosition.getDistanceTo(goToPosition)
                     > distance && !goToPositionSet){
@@ -92,6 +93,7 @@ public class TestRobot4
 
                 newPositionAngle = robotPosition.getBearingTo(goToPosition);
                 moveRobot();
+                goToPositionSet = false;
             }
 
         }while(robotPosition != path[path.length-1]);
@@ -105,18 +107,16 @@ public class TestRobot4
 
         DifferentialDriveRequest dr = new DifferentialDriveRequest();
 
-        if(((angle - newPositionAngle) < 2) && ((angle - newPositionAngle) >
-                (-2))){
-            dr.setLinearSpeed(0.4);
+        newSpeedAngle = newPositionAngle - angle;
+
+        if(newSpeedAngle > Math.PI){
+            newSpeedAngle = newSpeedAngle - 2*Math.PI;
         }
-        else if((angle - newPositionAngle) < 0){
-            //dr.setLinearSpeed(0);
-            dr.setAngularSpeed(0.5);
+        if(newSpeedAngle < (-Math.PI)){
+            newSpeedAngle = newSpeedAngle + 2*Math.PI;
         }
-        else if((angle - newPositionAngle) > 0){
-            //dr.setLinearSpeed(0);
-            dr.setAngularSpeed(-0.5);
-        }
+        dr.setAngularSpeed(newSpeedAngle);
+        dr.setLinearSpeed(0.4);
         try {
             robotcomm.putRequest(dr);
         }catch(Exception e){
