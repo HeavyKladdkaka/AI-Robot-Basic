@@ -189,6 +189,7 @@ public class TestRobot3
             speed = 0.5;
         } else if(Math.abs(angle) < Math.PI  + this.angularMargin/2 &&
                 Math.abs(angle) > Math.PI  - this.angularMargin/2){
+
             angle = 0;
             speed = -0.1;
         }
