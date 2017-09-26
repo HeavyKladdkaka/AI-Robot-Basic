@@ -109,7 +109,7 @@ public class TestRobot3
             distanceBetweenPoints += path[i].getDistanceTo(path[i+1]);
         }
 
-        this.lookAheadDistance = (distanceBetweenPoints / path.length) * 25;
+        this.lookAheadDistance = (distanceBetweenPoints / path.length) * 20;
 
         System.out.println("Path length: " + path.length);
         System.out.println("Average distance between points: "
