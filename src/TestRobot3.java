@@ -50,7 +50,7 @@ public class TestRobot3
 
         SetRobotMargins();
 
-        for(int i = 0 ; i < path.length ; i++){
+        for(int i = 0 ; i < path.length - 1 ; i++){
             robotcomm.getResponse(lr);
             robotHeading = getHeadingAngle(lr);
             robotPosition = getPosition(lr);
@@ -61,7 +61,7 @@ public class TestRobot3
 
         }
 
-        MoveRobotToFinalPosition(robotHeading);
+        //MoveRobotToFinalPosition(robotHeading);
 
         HaltRobotMovement();
 
