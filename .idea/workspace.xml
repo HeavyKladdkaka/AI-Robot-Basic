@@ -18,8 +18,8 @@
       <file leaf-file-name="TestRobot3.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TestRobot3.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-804">
-              <caret line="111" column="75" lean-forward="false" selection-start-line="111" selection-start-column="75" selection-end-line="111" selection-end-column="75" />
+            <state relative-caret-position="143">
+              <caret line="163" column="0" lean-forward="true" selection-start-line="163" selection-start-column="0" selection-end-line="163" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#SetRobotPath#0;class#TestRobot3#0" expanded="false" />
@@ -499,13 +499,6 @@
       <workItem from="1505292876069" duration="578000" />
       <workItem from="1505996135656" duration="153000" />
     </task>
-    <task id="LOCAL-00006" summary="lr">
-      <created>1505893209242</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1505893209242</updated>
-    </task>
     <task id="LOCAL-00007" summary="lr">
       <created>1505893970683</created>
       <option name="number" value="00007" />
@@ -842,7 +835,14 @@
       <option name="project" value="LOCAL" />
       <updated>1506435865169</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="lookahead = *20">
+      <created>1506436239253</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1506436239253</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -917,7 +917,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added angular &amp; linear margin." />
     <MESSAGE value="parantes runt en uträkning i turningangle" />
     <MESSAGE value="changed heading return statement" />
     <MESSAGE value="stuff" />
@@ -942,7 +941,8 @@
     <MESSAGE value="linearspeed = 0.4&#10;lookahead ? 0.7" />
     <MESSAGE value="speed = 1" />
     <MESSAGE value="added paths and increased lookaheaddistance" />
-    <option name="LAST_COMMIT_MESSAGE" value="added paths and increased lookaheaddistance" />
+    <MESSAGE value="lookahead = *20" />
+    <option name="LAST_COMMIT_MESSAGE" value="lookahead = *20" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1321,8 +1321,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TestRobot3.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-804">
-          <caret line="111" column="75" lean-forward="false" selection-start-line="111" selection-start-column="75" selection-end-line="111" selection-end-column="75" />
+        <state relative-caret-position="143">
+          <caret line="163" column="0" lean-forward="true" selection-start-line="163" selection-start-column="0" selection-end-line="163" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#SetRobotPath#0;class#TestRobot3#0" expanded="false" />

@@ -161,12 +161,17 @@ public class TestRobot3
         double speed;
 
         angle = bearing - robotHeading;
-        speed = 1;
 
         if(angle > Math.PI){
             angle -= 2 * Math.PI;
         } else if (angle < -Math.PI){
             angle += 2 * Math.PI;
+        }
+
+        if(Math.abs(angle) > 1){
+            speed = 0.5;
+        } else {
+            speed = 1;
         }
 
         SendDriveRequest(speed, angle);
