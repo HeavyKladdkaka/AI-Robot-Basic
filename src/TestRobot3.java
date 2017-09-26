@@ -23,7 +23,7 @@ public class TestRobot3
         this.host = host;
         this.port = port;
 
-        pathQueue = new LinkedList<>();
+        pathQueue = new LinkedList<Position>();
     }
 
     /**
@@ -163,11 +163,16 @@ public class TestRobot3
                                                     double robotHeading){
 
         double distance = robotPosition.getDistanceTo(nextPosition);
+        double bearing = robotPosition.getBearingTo(nextPosition);
 
-        //Angle in radians
-        double angle = Math.atan2(Math.cos(distance), Math.sin(distance));
+        double angle;
+        double speed;
 
-        double speed = 0;
+        if(robotHeading != bearing){
+            angle = bearing - robotHeading/240;
+        } else {
+            angle = 0;
+        }
 
         if(angle > 1.5){
             speed = 0.1;
