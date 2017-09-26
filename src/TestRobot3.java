@@ -59,17 +59,18 @@ public class TestRobot3
             robotHeading = getHeadingAngle(lr);
             robotPosition = getPosition(lr);
 
-            MoveRobotToPosition(nextPosition, robotHeading);
+            MoveRobotToPosition(path[(path.length - 1) - (stepsDone + 1)],
+                    robotHeading);
 
-            if(robotPosition.getDistanceTo
-                    (path[(path.length - 1) - stepsDone + 1]) <= linearMargin){
+            if(robotPosition.getDistanceTo(nextPosition) <= linearMargin){
                 stepsDone++;
                 nextPosition = path[(path.length - 1) - stepsDone];
                 System.out.println("Steps left: " + (path.length - stepsDone));
             }
         }
-
+        HaltRobotMovement();
         System.out.println("Steps left: " + (path.length - stepsDone));
+        System.out.println("Robot is done. ");
 
     }
 
@@ -123,7 +124,7 @@ public class TestRobot3
         distanceBetweenPoints /= path.length;
         angleBetweenPoints /= path.length;
 
-        this.linearMargin = distanceBetweenPoints;
+        this.linearMargin = distanceBetweenPoints/4;
         this.angularMargin = angleBetweenPoints/4;
 
         System.out.println("Path length: " + path.length);
@@ -181,6 +182,12 @@ public class TestRobot3
         angle = bearing - robotHeading;
         speed = 0.1;
 
+        if(angle > Math.PI){
+            angle -= 2 * Math.PI;
+        } else if (angle < Math.PI){
+            angle += 2 * Math.PI;
+        }
+
         if(Math.abs(angle) <= this.angularMargin){
             angle = 0;
             speed = 0.3;
@@ -188,7 +195,7 @@ public class TestRobot3
                 Math.abs(angle) > Math.PI  - this.angularMargin/2){
 
             angle = 0;
-            speed = -0.1;
+            speed = -0.3;
         }
 
         DifferentialDriveRequest dr = new DifferentialDriveRequest();
@@ -198,6 +205,19 @@ public class TestRobot3
 
         return dr;
 
+    }
+
+    private void HaltRobotMovement(){
+
+        DifferentialDriveRequest dr = new DifferentialDriveRequest();
+        dr.setLinearSpeed(0);
+        dr.setAngularSpeed(0);
+
+        try{
+            robotcomm.putRequest(dr);
+        } catch(Exception e){
+            System.out.println("Sending halt drive request failed.");
+        }
     }
 
 }
