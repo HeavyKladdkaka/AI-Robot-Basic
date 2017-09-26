@@ -5,7 +5,7 @@ import java.util.*;
 
 public class TestRobot3
 {
-    private double linearMargin, angularMargin;
+    private double lookAheadDistance;
     private int port;
     private String host;
     private RobotCommunication robotcomm;
@@ -23,7 +23,7 @@ public class TestRobot3
         this.host = host;
         this.port = port;
 
-        pathQueue = new LinkedList<Position>();
+        pathQueue = new LinkedList<>();
     }
 
     /**
@@ -99,27 +99,18 @@ public class TestRobot3
     }
 
     private void SetRobotMargins(){
+
         double distanceBetweenPoints = 0;
-        double angleBetweenPoints = 0;
-        for(int i = 0 ; i <= path.length ; i++){
+
+        for(int i = 0 ; i < path.length - 1; i++){
             distanceBetweenPoints += path[i].getDistanceTo(path[i+1]);
-            angleBetweenPoints += Math.abs(path[i].getBearingTo(path[i+1]));
         }
 
-        distanceBetweenPoints /= path.length;
-        angleBetweenPoints /= path.length;
-
-        this.linearMargin = distanceBetweenPoints;
-        this.angularMargin = angleBetweenPoints/4;
+        this.lookAheadDistance = distanceBetweenPoints / path.length;
 
         System.out.println("Path length: " + path.length);
-
         System.out.println("Average distance between points: " + distanceBetweenPoints);
-        System.out.println("Linear Margin: " + this.linearMargin);
-
-        System.out.println("Average bearing between points: " +
-                angleBetweenPoints);
-        System.out.println("Angular Margin: " + this.angularMargin);
+        System.out.println("Linear Margin: " + this.lookAheadDistance);
     }
 
     /**
@@ -141,7 +132,7 @@ public class TestRobot3
     Position getPosition(LocalizationResponse lr)
     {
         double[] coordinates = lr.getPosition();
-        return new Position(coordinates[0], coordinates[2]);
+        return new Position(coordinates[0], coordinates[1]);
     }
 
     private void MoveRobotToPosition(int i) throws Exception{
@@ -151,10 +142,11 @@ public class TestRobot3
         do {
             robotcomm.getResponse(lr);
             robotPosition = getPosition(lr);
+
             MoveRobot(path[i+1], getHeadingAngle(lr));
 
             robotcomm.getResponse(lr);
-        }while(getPosition(lr).getDistanceTo(path[i]) > linearMargin);
+        }while(getPosition(lr).getDistanceTo(path[i]) > lookAheadDistance);
     }
 
     private void MoveRobot(Position nextPosition, double robotHeading){
