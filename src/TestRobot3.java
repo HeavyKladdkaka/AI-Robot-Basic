@@ -44,7 +44,10 @@ public class TestRobot3
     {
         robotcomm = new RobotCommunication(host, port);
 
-        path = SetRobotPath("./input/Path-around-table.json");
+        path = SetRobotPath("./input/Path-around-table-and-back.json");
+        //path = SetRobotPath("./input/Path-around-table.json");
+        //path = SetRobotPath("./input/Path-to-bed.json");
+        //path = SetRobotPath("./input/Path-from-bed.json");
 
         SetRobotMargins();
 
@@ -106,12 +109,12 @@ public class TestRobot3
             distanceBetweenPoints += path[i].getDistanceTo(path[i+1]);
         }
 
-        this.lookAheadDistance = (distanceBetweenPoints / path.length) * 20;
+        this.lookAheadDistance = (distanceBetweenPoints / path.length) * 25;
 
         System.out.println("Path length: " + path.length);
         System.out.println("Average distance between points: "
                 + distanceBetweenPoints);
-        System.out.println("Linear Margin: " + this.lookAheadDistance);
+        System.out.println("Look Ahead Distance: " + this.lookAheadDistance);
     }
 
     /**

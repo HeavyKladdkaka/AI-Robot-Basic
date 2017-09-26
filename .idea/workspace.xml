@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="efcebfbf-8ab9-4da0-a969-75578eb6663f" name="Default" comment="">
+    <list default="true" id="efcebfbf-8ab9-4da0-a969-75578eb6663f" name="Default" comment="speed = 1">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/TestRobot3.java" afterPath="$PROJECT_DIR$/src/TestRobot3.java" />
     </list>
@@ -18,8 +18,8 @@
       <file leaf-file-name="TestRobot3.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TestRobot3.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="218">
-              <caret line="160" column="17" lean-forward="false" selection-start-line="160" selection-start-column="17" selection-end-line="160" selection-end-column="17" />
+            <state relative-caret-position="107">
+              <caret line="111" column="75" lean-forward="false" selection-start-line="111" selection-start-column="75" selection-end-line="111" selection-end-column="75" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#SetRobotPath#0;class#TestRobot3#0" expanded="false" />
@@ -499,13 +499,6 @@
       <workItem from="1505292876069" duration="578000" />
       <workItem from="1505996135656" duration="153000" />
     </task>
-    <task id="LOCAL-00004" summary="Started a moving robot maybe?">
-      <created>1505131245124</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1505131245124</updated>
-    </task>
     <task id="LOCAL-00005" summary="Started a moving robot maybe again?">
       <created>1505296502117</created>
       <option name="number" value="00005" />
@@ -842,7 +835,14 @@
       <option name="project" value="LOCAL" />
       <updated>1506435339095</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="speed = 1">
+      <created>1506435601154</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1506435601154</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -917,7 +917,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="a" />
     <MESSAGE value="pushy push" />
     <MESSAGE value="Added angular &amp; linear margin." />
     <MESSAGE value="parantes runt en uträkning i turningangle" />
@@ -942,7 +941,8 @@
     <MESSAGE value="-PI" />
     <MESSAGE value="Changed GetPosition to 0,1 not 0,2" />
     <MESSAGE value="linearspeed = 0.4&#10;lookahead ? 0.7" />
-    <option name="LAST_COMMIT_MESSAGE" value="linearspeed = 0.4&#10;lookahead ? 0.7" />
+    <MESSAGE value="speed = 1" />
+    <option name="LAST_COMMIT_MESSAGE" value="speed = 1" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1321,8 +1321,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TestRobot3.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="160" column="17" lean-forward="false" selection-start-line="160" selection-start-column="17" selection-end-line="160" selection-end-column="17" />
+        <state relative-caret-position="107">
+          <caret line="111" column="75" lean-forward="false" selection-start-line="111" selection-start-column="75" selection-end-line="111" selection-end-column="75" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#SetRobotPath#0;class#TestRobot3#0" expanded="false" />
