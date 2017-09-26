@@ -42,31 +42,34 @@ public class TestRobot3
 
     public void run() throws Exception
     {
+        int stepsDone = 1;
         robotcomm = new RobotCommunication(host, port);
 
         LocalizationResponse lr = new LocalizationResponse();
 
         path = SetRobotPath("./input/Path-around-table.json");
-        System.out.println("Steps left: " + path.length);
+        System.out.println("Steps left: " + (path.length - stepsDone));
 
         setRobotMargins();
 
-        Position nextPosition;
+        Position nextPosition = path[(path.length - 1) - stepsDone];
 
-        while(!pathQueue.isEmpty()){
+        while(stepsDone < path.length){
             robotcomm.getResponse(lr);
             robotHeading = getHeadingAngle(lr);
             robotPosition = getPosition(lr);
 
-            nextPosition = pathQueue.peek();
-
             MoveRobotToPosition(nextPosition, robotHeading);
 
             if(robotPosition.getDistanceTo(nextPosition) <= linearMargin){
-                pathQueue.pollFirst();
-                System.out.println("Steps left: " + path.length);
+                stepsDone++;
+                nextPosition = path[(path.length - 1) - stepsDone];
+                System.out.println("Steps left: " + (path.length - stepsDone));
             }
         }
+
+        System.out.println("Steps left: " + (path.length - stepsDone));
+
     }
 
     Position[] SetRobotPath(String filename){
@@ -119,8 +122,8 @@ public class TestRobot3
         distanceBetweenPoints /= path.length;
         angleBetweenPoints /= path.length;
 
-        this.linearMargin = distanceBetweenPoints/6;
-        this.angularMargin = angleBetweenPoints/6;
+        this.linearMargin = distanceBetweenPoints/4;
+        this.angularMargin = angleBetweenPoints/4;
 
         System.out.println("Path length: " + path.length);
 
@@ -173,7 +176,6 @@ public class TestRobot3
     private DifferentialDriveRequest CalculateDrive(Position nextPosition,
                                                     double robotHeading){
 
-        double distance = robotPosition.getDistanceTo(nextPosition);
         double bearing = robotPosition.getBearingTo(nextPosition);
 
         double angle;
@@ -190,21 +192,6 @@ public class TestRobot3
             angle = 0;
             speed = -0.1;
         }
-
-
-        /*
-        if(angle > 1.5){
-            speed = 0.1;
-        } else if (angle > 1){
-            speed = 0.3;
-        } else if(angle > 0.5){
-            speed = 0.5;
-        } else if (angle > 0.1){
-            speed = 1;
-        } else {
-            speed = 0.1;
-        }
-        */
 
         DifferentialDriveRequest dr = new DifferentialDriveRequest();
 
