@@ -168,11 +168,15 @@ public class TestRobot3
             angle += 2 * Math.PI;
         }
 
+        /*
         if(Math.abs(angle) > 1){
             speed = 0.5;
         } else {
             speed = 1;
         }
+        */
+
+        speed = 0.5;
 
         SendDriveRequest(speed, angle);
     }
