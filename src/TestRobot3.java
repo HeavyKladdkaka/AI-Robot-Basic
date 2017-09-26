@@ -179,7 +179,7 @@ public class TestRobot3
         double speed;
 
         if(Math.abs(robotHeading) > Math.abs(bearing)-this.angularMargin){
-            angle = bearing - robotHeading/240;
+            angle = (bearing - robotHeading)/240;
         } else {
             angle = 0;
         }
