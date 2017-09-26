@@ -143,10 +143,6 @@ public class TestRobot3
     double getHeadingAngle(LocalizationResponse lr)
     {
         double e[] = lr.getOrientation();
-
-        //double angle = 2 * Math.atan2(e[3], e[0]);
-        //return angle * 180 / Math.PI;
-
         return Math.atan2(e[3], e[0]);
     }
 
@@ -186,7 +182,7 @@ public class TestRobot3
 
         if(Math.abs(angle) <= this.angularMargin){
             angle = 0;
-            speed = 0.5;
+            speed = 0.3;
         } else if(Math.abs(angle) < Math.PI  + this.angularMargin/2 &&
                 Math.abs(angle) > Math.PI  - this.angularMargin/2){
 
@@ -195,8 +191,6 @@ public class TestRobot3
         }
 
         DifferentialDriveRequest dr = new DifferentialDriveRequest();
-
-        System.out.println("Angle: " + angle);
 
         dr.setLinearSpeed(speed);
         dr.setAngularSpeed(angle);
