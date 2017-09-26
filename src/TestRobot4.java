@@ -57,7 +57,7 @@ public class TestRobot4
     {
         robotcomm = new RobotCommunication(host, port);
         Position robotPosition;
-        double lookAheadDistance = 0.5;
+        double lookAheadDistance = 0.55;
         RobotCommunication robotcomm = new RobotCommunication(host, port);
         pathQueue = SetRobotPath("./input/Path-around-table.json");
         LocalizationResponse lr = new LocalizationResponse(); // response
@@ -75,6 +75,8 @@ public class TestRobot4
                     position[1]);
 
             robotPosition = new Position(position);
+            System.out.println("Last position in path: " + pathQueue.peekLast
+                    ().getX() + ", " + pathQueue.peekLast().getY());
 
             System.out.println("Distans till position är: " + robotPosition
                     .getDistanceTo(pathQueue.peekFirst()));
@@ -96,11 +98,12 @@ public class TestRobot4
                 goToPositionSet = false;
             }
 
-        }while(robotPosition != path[path.length-1]);
+        }while(pathQueue.peekLast().getDistanceTo(robotPosition) > 1);
         // set up request to stop the robot
         dr.setLinearSpeed(0);
         dr.setAngularSpeed(0);
-
+        System.out.println("Robot is within 1 meter from the last point in" +
+                " the path.");
     }
 
     private void moveRobot(){
@@ -110,13 +113,22 @@ public class TestRobot4
         newSpeedAngle = newPositionAngle - angle;
 
         if(newSpeedAngle > Math.PI){
-            newSpeedAngle = newSpeedAngle - 2*Math.PI;
+            newSpeedAngle -= 2*Math.PI;
         }
         if(newSpeedAngle < (-Math.PI)){
-            newSpeedAngle = newSpeedAngle + 2*Math.PI;
+            newSpeedAngle += 2*Math.PI;
         }
         dr.setAngularSpeed(newSpeedAngle);
-        dr.setLinearSpeed(0.3);
+        if(newSpeedAngle <= 0) {
+            dr.setLinearSpeed(1.5 + newSpeedAngle);
+        }
+        else if(newSpeedAngle > 0) {
+            dr.setLinearSpeed(1.5 - newSpeedAngle);
+        }
+        else{
+            dr.setLinearSpeed(0.4);
+        }
+
         try {
             robotcomm.putRequest(dr);
         }catch(Exception e){
