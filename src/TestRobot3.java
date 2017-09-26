@@ -198,7 +198,6 @@ public class TestRobot3
         dr.setAngularSpeed(angle);
 
         return dr;
-
     }
 
     private void HaltRobotMovement(){
