@@ -80,7 +80,7 @@ public class TestRobot4
     {
         robotcomm = new RobotCommunication(host, port);
         Position robotPosition;
-        double distance = 2;
+        double distance = 1;
         RobotCommunication robotcomm = new RobotCommunication(host, port);
         pathQueue = SetRobotPath("./input/Path-around-table.json");
         LocalizationResponse lr = new LocalizationResponse(); // response
@@ -93,7 +93,7 @@ public class TestRobot4
                 try {
                     dr = new DifferentialDriveRequest(); // request
                     robotcomm.getResponse(lr); // ask the robot about its position and angle
-                    angle = lr.getHeadingAngle();
+                    angle = getHeadingAngle(lr);
                     System.out.println("heading = " + angle);
                     position = getPosition(lr);
                     System.out.println("position = " + position[0] + ", " +
@@ -131,13 +131,15 @@ public class TestRobot4
             else if((robotPosition.getDistanceTo((Position)pathQueue.peek()) >
                     distance) && (goToPositionSet)){
 
-                newPositionAngle = robotPosition.getBearingTo(goToPosition);
+                newPositionAngle = robotPosition.getBearingTo
+                        (goToPosition);
 
                 moveRobot();
             }
             else if(goToPositionSet){
                 newPositionAngle = robotPosition.getBearingTo(goToPosition);
                 moveRobot();
+                goToPositionSet = false;
             }
 
         }while(robotPosition != path[path.length-1]);
@@ -151,17 +153,17 @@ public class TestRobot4
 
         DifferentialDriveRequest dr = new DifferentialDriveRequest();
 
-        if(((angle - newPositionAngle) < 2) && ((angle - newPositionAngle) >
-                (-2))){
-            dr.setLinearSpeed(1.0);
+        if(((angle - newPositionAngle) < 1.5) && ((angle - newPositionAngle) >
+                (-1.5))){
+            dr.setLinearSpeed(0.4);
         }
         else if((angle - newPositionAngle) < 0){
-            dr.setLinearSpeed(0.5);
-            dr.setAngularSpeed(-0.1);
+            dr.setLinearSpeed(0.1);
+            dr.setAngularSpeed(0.2);
         }
         else if((angle - newPositionAngle) > 0){
-            dr.setLinearSpeed(0.5);
-            dr.setAngularSpeed(1.0);
+            dr.setLinearSpeed(0.1);
+            dr.setAngularSpeed(-0.2);
         }
         try {
             robotcomm.putRequest(dr);
