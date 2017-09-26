@@ -57,7 +57,7 @@ public class TestRobot4
     {
         robotcomm = new RobotCommunication(host, port);
         Position robotPosition;
-        double distance = 0.7;
+        double lookAheadDistance = 0.5;
         RobotCommunication robotcomm = new RobotCommunication(host, port);
         pathQueue = SetRobotPath("./input/Path-around-table.json");
         LocalizationResponse lr = new LocalizationResponse(); // response
@@ -80,12 +80,12 @@ public class TestRobot4
                     .getDistanceTo(pathQueue.peekFirst()));
 
             if(robotPosition.getDistanceTo(goToPosition) <
-                    distance){
+                    lookAheadDistance){
 
                 goToPosition = pathQueue.poll();
             }
             else if (robotPosition.getDistanceTo(goToPosition)
-                    > distance && !goToPositionSet){
+                    > lookAheadDistance && !goToPositionSet){
 
                 goToPositionSet = true;
             }
@@ -116,7 +116,7 @@ public class TestRobot4
             newSpeedAngle = newSpeedAngle + 2*Math.PI;
         }
         dr.setAngularSpeed(newSpeedAngle);
-        dr.setLinearSpeed(0.4);
+        dr.setLinearSpeed(0.3);
         try {
             robotcomm.putRequest(dr);
         }catch(Exception e){
