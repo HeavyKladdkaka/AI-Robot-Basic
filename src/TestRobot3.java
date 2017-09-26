@@ -5,7 +5,7 @@ import java.util.*;
 
 public class TestRobot3
 {
-    private double robotHeading, margin;
+    private double robotHeading, linearMargin, angularMargin;
     private int port;
     private String host;
     private RobotCommunication robotcomm;
@@ -48,7 +48,7 @@ public class TestRobot3
 
         path = SetRobotPath("./input/Path-around-table.json");
 
-        setRobotMargin();
+        setRobotMargins();
 
         Position nextPosition;
 
@@ -61,7 +61,7 @@ public class TestRobot3
 
             MoveRobotToPosition(nextPosition, robotHeading);
 
-            if(robotPosition.getDistanceTo(nextPosition) <= margin){
+            if(robotPosition.getDistanceTo(nextPosition) <= linearMargin){
                 pathQueue.pollLast();
                 System.out.println("Robot moved super good!");
             } else {
@@ -109,18 +109,28 @@ public class TestRobot3
         return null;
     }
 
-    void setRobotMargin(){
+    void setRobotMargins(){
         double distanceBetweenPoints = 0;
+        double angleBetweenPoints = 0;
         for(int i = 0 ; i < path.length - 1 ; i++){
             distanceBetweenPoints += path[i].getDistanceTo(path[i+1]);
+            angleBetweenPoints += Math.abs(path[i].getBearingTo(path[i+1]));
         }
 
         distanceBetweenPoints /= path.length;
+        angleBetweenPoints /= path.length;
 
-        this.margin = distanceBetweenPoints/4;
+        this.linearMargin = distanceBetweenPoints/4;
+        this.angularMargin = angleBetweenPoints/4;
+
+        System.out.println("Path length: " + path.length);
 
         System.out.println("Average distance between points: " + distanceBetweenPoints);
-        System.out.println("Margin: " + this.margin);
+        System.out.println("Linear Margin: " + this.linearMargin);
+
+        System.out.println("Average bearing between points: " +
+                angleBetweenPoints);
+        System.out.println("Angular Margin: " + this.angularMargin);
     }
 
     /**
@@ -168,12 +178,15 @@ public class TestRobot3
         double angle;
         double speed;
 
-        if(robotHeading != bearing){
+        if(Math.abs(robotHeading) > Math.abs(bearing)-this.angularMargin){
             angle = bearing - robotHeading/240;
         } else {
             angle = 0;
         }
 
+        speed = 0.3;
+
+        /*
         if(angle > 1.5){
             speed = 0.1;
         } else if (angle > 1){
@@ -185,6 +198,7 @@ public class TestRobot3
         } else {
             speed = 0.1;
         }
+        */
 
         DifferentialDriveRequest dr = new DifferentialDriveRequest();
 
