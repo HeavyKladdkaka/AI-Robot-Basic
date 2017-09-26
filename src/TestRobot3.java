@@ -42,7 +42,7 @@ public class TestRobot3
 
     public void run() throws Exception
     {
-        int stepsDone = 0;
+        int stepsDone = 1;
         robotcomm = new RobotCommunication(host, port);
 
         LocalizationResponse lr = new LocalizationResponse();
@@ -52,7 +52,8 @@ public class TestRobot3
 
         setRobotMargins();
 
-        Position nextPosition = path[(path.length - 1) - stepsDone];
+        //Position nextPosition = path[(path.length - 1) - stepsDone];
+        Position nextPosition = path[stepsDone];
 
         while(stepsDone < path.length){
             robotcomm.getResponse(lr);
@@ -63,7 +64,8 @@ public class TestRobot3
 
             if(robotPosition.getDistanceTo(nextPosition) <= linearMargin){
                 stepsDone++;
-                nextPosition = path[(path.length - 1) - stepsDone];
+                nextPosition = path[stepsDone];
+                //nextPosition = path[(path.length - 1) - stepsDone];
                 System.out.println("Steps left: " + (path.length - stepsDone));
             }
         }
