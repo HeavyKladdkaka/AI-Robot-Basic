@@ -70,12 +70,12 @@ public class RummelTheRobustRobot {
 
         double[] position;
         robotcomm = new RobotCommunication(host, port);
-        pathQueue = SetRobotPath("./input/Path-around-table-and-back.json");
+        pathQueue = SetRobotPath("D:\\exam2017.json");
         LocalizationResponse lr = new LocalizationResponse();
 
         Position goToPosition = pathQueue.peekFirst();
         Position robotPosition;
-        double lookAheadDistance = 1.2;
+        double lookAheadDistance = 1;
 
         Date startTime = new Date();
 
