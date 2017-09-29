@@ -19,6 +19,8 @@ public class RummelTheRobustRobot {
     private String host;
     private int port;
     private LinkedList<Position> pathQueue;
+    private Date startTime;
+    private boolean isTimeStarted;
 
     /**
      * Create a RummelRobot connected to host "host" at port "port" and
@@ -70,14 +72,13 @@ public class RummelTheRobustRobot {
 
         double[] position;
         robotcomm = new RobotCommunication(host, port);
-        pathQueue = SetRobotPath("D:\\exam2017.json");
+        pathQueue = SetRobotPath("./input/Path-from-bed.json");
         LocalizationResponse lr = new LocalizationResponse();
 
         Position goToPosition = pathQueue.peekFirst();
         Position robotPosition;
         double lookAheadDistance = 1;
-
-        Date startTime = new Date();
+        isTimeStarted = false;
 
         do {
 
@@ -161,6 +162,12 @@ public class RummelTheRobustRobot {
         } else {
 
             setWheelSpeed(robotToPositionAngle,0.5);
+        }
+
+        if(!isTimeStarted){
+
+            startTime = new Date();
+            isTimeStarted = true;
         }
     }
 
